@@ -45,16 +45,12 @@ export const Layout: React.FC<LayoutProps> = ({ children, onNavigateHome, curren
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             <div className="flex items-center cursor-pointer group" onClick={onNavigateHome}>
-              <div className="relative w-12 h-12 bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mr-4 shadow-xl shadow-blue-500/40 group-hover:shadow-blue-500/60 group-hover:scale-105 transition-all duration-300">
-                <span className="text-white font-heading font-bold text-2xl tracking-tighter">O</span>
-                <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-2xl"></div>
-                {/* Rotating border effect */}
-                <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                     style={{
-                       background: 'linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent)',
-                       animation: 'spin 3s linear infinite'
-                     }}>
-                </div>
+              <div className="relative w-12 h-12 rounded-2xl flex items-center justify-center mr-4 shadow-xl shadow-blue-500/40 group-hover:shadow-blue-500/60 group-hover:scale-105 transition-all duration-300 overflow-hidden">
+                <img 
+                  src="/assets/icon.jpg" 
+                  alt="OmniTool Logo" 
+                  className="w-full h-full object-cover rounded-2xl"
+                />
               </div>
               <div>
                 <h1 className="text-2xl font-heading font-bold tracking-tight bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400 bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300">
@@ -112,8 +108,12 @@ export const Layout: React.FC<LayoutProps> = ({ children, onNavigateHome, curren
             {/* Brand Section */}
             <div className="col-span-1 md:col-span-5">
               <div className="flex items-center mb-6">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center mr-3 shadow-lg shadow-blue-500/30">
-                  <span className="text-white font-heading font-bold text-lg tracking-tighter">O</span>
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center mr-3 shadow-lg shadow-blue-500/30 overflow-hidden">
+                  <img 
+                    src="/assets/icon.jpg" 
+                    alt="OmniTool Logo" 
+                    className="w-full h-full object-cover rounded-xl"
+                  />
                 </div>
                 <h3 className="text-2xl font-heading font-bold bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">OmniTool</h3>
               </div>
