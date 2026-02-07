@@ -1,0 +1,21 @@
+{
+  "name": "OmniTool Digital Workspace",
+  "short_name": "OmniTool",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#2563eb",
+  "description": "Professional client-side image and PDF tools.",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3917/3917032.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3917/3917032.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

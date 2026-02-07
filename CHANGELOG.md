@@ -1,0 +1,39 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.0.0] - 2024-05-20
+### 🚀 Released
+- Initial Production Release of OmniTool.
+
+### ✨ New Features
+- **Dashboard:** New grid layout with category sorting and search (Ctrl+K).
+- **Typography:** Implemented Satoshi (Headings), Inter (UI), and JetBrains Mono (Data).
+- **Dark Mode:** Deepened slate palette for better contrast.
+- **Tools Added:**
+    - Bulk Image Resizer (ZIP export).
+    - HEIC to JPG Converter.
+    - SVG Vectorizer (Raster to SVG).
+    - PDF to GIF Converter.
+    - PDF Compressor with quality presets.
+- **Privacy:** Added visual "Client-Side Secure" badge in header.
+
+### 💎 Improvements
+- **UX:** Added micro-interactions and hover states to all cards.
+- **Performance:** Optimized `pdf.js` worker loading.
+- **Animations:** Added `framer-motion` for smooth list reordering in PDF/Collage tools.
+
+### 🐛 Fixed
+- Fixed aspect ratio drift in Image Resizer.
+- Resolved mobile drag-and-drop issues in Collage Maker.
+
+---
+
+## [0.9.0] - Beta
+### Added
+- Core image tools (Resize, Crop, Rotate).
+- Basic PDF generation.
+- PWA Manifest and Service Worker.
