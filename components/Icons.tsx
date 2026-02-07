@@ -158,3 +158,24 @@ export const BackgroundRemoverIcon = ({ className = "w-6 h-6" }: { className?: s
       <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3-13h-2v6h-2V7H9v6H7l5 5 5-5h-2z" opacity="0.9"/>
     </svg>
 );
+
+export const ShieldCheckIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M0 0h24v24H0z" fill="none"/>
+      <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" opacity="0.9"/>
+    </svg>
+);
+
+export const ZapIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M0 0h24v24H0z" fill="none"/>
+      <path d="M7 21l-1-6H2l11-13h3.5L16.5 7H21L10 21z" opacity="0.9"/>
+    </svg>
+);
+
+export const ServerOffIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M0 0h24v24H0z" fill="none"/>
+      <path d="M21.19 21.19L2.81 2.81 1.39 4.22 5.17 8H4c-1.1 0-2 .9-2 2v2c0 1.1.9 2 2 2h4v4h2v-4h2.17l3.42 3.42c-.54.19-1.12.33-1.72.43.13.59.35 1.15.65 1.66.86-.17 1.67-.44 2.42-.81l2.84 2.84 1.41-1.41zM8 12H4v-2h4v2zm12-4V6c0-1.1-.9-2-2-2H9.83l2 2H20v2h-6.17l2 2H20zm0 4h-1.17l2 2H20v-2h2v4c0 .37-.11.72-.28 1.01l1.64 1.64c.4-.75.64-1.61.64-2.53v-2c0-1.1-.9-2-2-2zM4 6V4c0-1.1.9-2 2-2h3.17l2 2H6v2H4zm1 14h2v2H5v-2z" opacity="0.9"/>
+    </svg>
+);
