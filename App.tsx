@@ -18,12 +18,13 @@ import { PdfCompressor } from './tools/PdfCompressor';
 import { PdfToGif } from './tools/PdfToGif';
 import { ImageEnlarger } from './tools/ImageEnlarger';
 import { PdfConverter } from './tools/PdfConverter';
+import { BackgroundRemover } from './tools/BackgroundRemover';
 import { ToolCategory, ToolDef } from './types';
 import { 
   ResizeIcon, ConvertIcon, LaughIcon, PdfIcon, 
   CropRealIcon, CompressIcon, RotateIcon, PdfImageIcon,
   CollageIcon, PaletteIcon, BulkIcon, HeicIcon, SvgIcon,
-  GifIcon, ExpandIcon
+  GifIcon, ExpandIcon, BackgroundRemoverIcon
 } from './components/Icons';
 
 function App() {
@@ -79,6 +80,7 @@ function App() {
         case 'enlarge': return <ImageEnlarger />;
         case 'picker': return <ColorPicker />;
         case 'meme': return <MemeGenerator />;
+        case 'background-remover': return <BackgroundRemover />;
         
         case 'convert': return <ImageConverter />;
         case 'pdf-jpg': return <PdfToImage defaultOutputFormat="jpeg" />; 
@@ -202,6 +204,14 @@ function App() {
       description: 'Make viral content fast.',
       category: ToolCategory.IMAGE, 
       icon: <LaughIcon className="w-8 h-8 text-pink-500" />,
+      component: null
+    },
+    {
+      id: 'background-remover',
+      title: 'Background Remover',
+      description: 'Extract subjects with transparency.',
+      category: ToolCategory.IMAGE,
+      icon: <BackgroundRemoverIcon className="w-8 h-8 text-emerald-500" />,
       component: null
     },
 
