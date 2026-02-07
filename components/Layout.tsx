@@ -33,30 +33,40 @@ export const Layout: React.FC<LayoutProps> = ({ children, onNavigateHome, curren
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300">
-      <header className="sticky top-0 z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+    <div className="min-h-screen flex flex-col text-slate-900 dark:text-slate-100 transition-colors duration-300 relative">
+      {/* Animated background elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/10 dark:bg-blue-500/5 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-purple-500/10 dark:bg-purple-500/5 rounded-full blur-3xl animate-pulse-slow" style={{animationDelay: '1s'}}></div>
+        <div className="absolute top-1/2 left-1/2 w-[400px] h-[400px] bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-3xl animate-pulse-slow" style={{animationDelay: '2s'}}></div>
+      </div>
+
+      <header className="sticky top-0 z-50 glass backdrop-blur-xl border-b border-white/20 dark:border-slate-800/50 shadow-lg shadow-black/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center cursor-pointer group" onClick={onNavigateHome}>
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center mr-3 shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">
+              <div className="relative w-10 h-10 bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600 rounded-xl flex items-center justify-center mr-3 shadow-xl shadow-blue-500/30 group-hover:shadow-blue-500/50 group-hover:scale-110 transition-all duration-300">
                 <span className="text-white font-heading font-bold text-xl tracking-tighter">O</span>
+                <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-xl"></div>
               </div>
-              <h1 className="text-xl font-heading font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">
-                OmniTool
-              </h1>
+              <div>
+                <h1 className="text-xl font-heading font-bold tracking-tight bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
+                  OmniTool
+                </h1>
               {currentToolTitle && (
                 <>
                   <span className="mx-3 text-slate-300 dark:text-slate-700">/</span>
-                  <span className="text-slate-600 dark:text-slate-300 font-medium tracking-tight font-heading">{currentToolTitle}</span>
+                  <span className="text-slate-700 dark:text-slate-300 font-semibold tracking-tight font-heading">{currentToolTitle}</span>
                 </>
               )}
+              </div>
             </div>
             
             <div className="flex items-center space-x-4">
               
               <button 
                 onClick={toggleTheme}
-                className="p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                className="p-2.5 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 bg-slate-100/50 dark:bg-slate-800/50 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-xl transition-all duration-300 hover:scale-110 shadow-sm hover:shadow-md"
                 aria-label="Toggle Dark Mode"
               >
                 {isDark ? (
@@ -74,43 +84,44 @@ export const Layout: React.FC<LayoutProps> = ({ children, onNavigateHome, curren
         </div>
       </header>
 
-      <main className="flex-grow w-full">
+      <main className="flex-grow w-full relative z-10">
         {children}
       </main>
 
-      <footer className="bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 py-12 mt-12">
+      <footer className="glass backdrop-blur-xl border-t border-white/20 dark:border-slate-800/50 py-12 mt-12 relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="col-span-1 md:col-span-2">
               <div className="flex items-center mb-4">
-                  <div className="w-6 h-6 bg-blue-600 rounded flex items-center justify-center mr-2">
-                    <span className="text-white font-heading font-bold text-sm tracking-tighter">O</span>
+                  <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center mr-3 shadow-lg shadow-blue-500/30">
+                    <span className="text-white font-heading font-bold tracking-tighter">O</span>
                   </div>
-                  <h3 className="text-lg font-heading font-bold text-slate-900 dark:text-white">OmniTool</h3>
+                  <h3 className="text-xl font-heading font-bold bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">OmniTool</h3>
               </div>
-              <p className="text-slate-500 dark:text-slate-400 max-w-xs text-sm leading-relaxed">
+              <p className="text-slate-600 dark:text-slate-400 max-w-xs leading-relaxed\">
                 Professional, secure, client-side tools. <br/>
                 No uploads, no waiting, just instant results.
               </p>
             </div>
             <div>
               <h4 className="font-heading font-semibold text-slate-900 dark:text-white mb-4">Tools</h4>
-              <ul className="space-y-2 text-slate-500 dark:text-slate-400 text-sm">
-                <li><button onClick={onNavigateHome} className="hover:text-blue-500 transition-colors">Image Tools</button></li>
-                <li><button onClick={onNavigateHome} className="hover:text-blue-500 transition-colors">PDF Tools</button></li>
-                <li><button onClick={onNavigateHome} className="hover:text-blue-500 transition-colors">Converters</button></li>
+              <ul className="space-y-2 text-slate-600 dark:text-slate-400\">
+                <li><button onClick={onNavigateHome} className="hover:text-blue-500 transition-colors\">Image Tools</button></li>
+                <li><button onClick={onNavigateHome} className="hover:text-blue-500 transition-colors\">PDF Tools</button></li>
+                <li><button onClick={onNavigateHome} className="hover:text-blue-500 transition-colors\">Converters</button></li>
               </ul>
             </div>
             <div>
               <h4 className="font-heading font-semibold text-slate-900 dark:text-white mb-4">Legal</h4>
-              <ul className="space-y-2 text-slate-500 dark:text-slate-400 text-sm">
-                <li>Privacy Policy</li>
-                <li>Terms of Service</li>
+              <ul className="space-y-2 text-slate-600 dark:text-slate-400\">
+                <li className="hover:text-blue-500 transition-colors cursor-pointer\">Privacy Policy</li>
+                <li className="hover:text-blue-500 transition-colors cursor-pointer\">Terms of Service</li>
               </ul>
             </div>
           </div>
-          <div className="mt-8 pt-8 border-t border-slate-100 dark:border-slate-800 text-center text-slate-400 text-sm">
-            © {new Date().getFullYear()} OmniTool. 100% Client-Side Architecture.
+          <div className="mt-8 pt-8 border-t border-slate-200/50 dark:border-slate-800/50 text-center text-slate-500 dark:text-slate-400\">
+            <p>© {new Date().getFullYear()} OmniTool. 100% Client-Side Architecture.</p>
+            <p className="text-xs mt-2\">Made with <span className="text-red-500\">♥</span> for privacy-conscious users</p>
           </div>
         </div>
       </footer>
