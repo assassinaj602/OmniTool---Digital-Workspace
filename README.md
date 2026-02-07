@@ -9,8 +9,6 @@
 > **The all-in-one digital workspace that runs entirely in your browser.**  
 > No uploads. No servers. No waiting. Just instant, secure file processing.
 
-![OmniTool Dashboard Screenshot](https://via.placeholder.com/1200x600.png?text=OmniTool+Dashboard+Preview)
-
 ## 🌟 Why OmniTool?
 
 Most online tools upload your sensitive documents to a remote server to process them. **OmniTool is different.**
@@ -48,7 +46,7 @@ By leveraging **WebAssembly** and modern browser APIs, OmniTool processes files 
 
 *   **Frontend:** React 19, TypeScript
 *   **Styling:** Tailwind CSS, Framer Motion
-*   **Typography:** Satoshi (Headings), Inter (UI), JetBrains Mono (Data)
+*   **Typography:** Space Grotesk (Headings), Inter (UI), JetBrains Mono (Data)
 *   **Core Libraries:**
     *   `pdf.js` / `jspdf` (Document manipulation)
     *   `imagetracerjs` (Vectorization)

@@ -8,14 +8,14 @@
   "description": "Professional client-side image and PDF tools.",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/3917/3917032.png",
+      "src": "/assets/ideogram-v3.0_Design_a_modern_minimal_professional_logo_for_a_software_product_named_OmniTool_-0.jpg",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/jpeg"
     },
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/3917/3917032.png",
+      "src": "/assets/ideogram-v3.0_Design_a_modern_minimal_professional_logo_for_a_software_product_named_OmniTool_-0.jpg",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/jpeg"
     }
   ]
 }

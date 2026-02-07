@@ -37,9 +37,9 @@ OmniTool is a community-driven project. We want to make it as easy as possible f
     *   Use utility classes over custom CSS.
     *   Use `dark:` modifiers for dark mode compatibility.
 *   **Typography:** 
-    *   Use `font-heading` for titles (Satoshi).
-    *   Use `font-sans` for UI (Inter).
-    *   Use `font-mono` for technical data (JetBrains Mono).
+    *   Use `font-heading` (Space Grotesk) for titles.
+    *   Use `font-sans` (Inter) for UI text.
+    *   Use `font-mono` (JetBrains Mono) for technical data.
 *   **Icons:** Use the `Icons.tsx` component library.
 
 ## 🧪 Testing

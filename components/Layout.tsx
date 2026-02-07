@@ -39,7 +39,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, onNavigateHome, curren
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center cursor-pointer group" onClick={onNavigateHome}>
               <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center mr-3 shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">
-                <span className="text-white font-heading font-bold text-xl">O</span>
+                <span className="text-white font-heading font-bold text-xl tracking-tighter">O</span>
               </div>
               <h1 className="text-xl font-heading font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">
                 OmniTool
@@ -47,21 +47,13 @@ export const Layout: React.FC<LayoutProps> = ({ children, onNavigateHome, curren
               {currentToolTitle && (
                 <>
                   <span className="mx-3 text-slate-300 dark:text-slate-700">/</span>
-                  <span className="text-slate-600 dark:text-slate-300 font-medium tracking-tight">{currentToolTitle}</span>
+                  <span className="text-slate-600 dark:text-slate-300 font-medium tracking-tight font-heading">{currentToolTitle}</span>
                 </>
               )}
             </div>
             
-            <div className="flex items-center space-x-4 md:space-x-6">
+            <div className="flex items-center space-x-4">
               
-              {/* Privacy Badge */}
-              <div className="hidden md:flex items-center px-3 py-1 bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400 rounded-full text-xs font-bold border border-green-200 dark:border-green-800" title="Your files are processed in your browser. No data is sent to any server.">
-                  <svg className="w-3 h-3 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                  Client-Side Secure
-              </div>
-
               <button 
                 onClick={toggleTheme}
                 className="p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
@@ -92,7 +84,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, onNavigateHome, curren
             <div className="col-span-1 md:col-span-2">
               <div className="flex items-center mb-4">
                   <div className="w-6 h-6 bg-blue-600 rounded flex items-center justify-center mr-2">
-                    <span className="text-white font-heading font-bold text-sm">O</span>
+                    <span className="text-white font-heading font-bold text-sm tracking-tighter">O</span>
                   </div>
                   <h3 className="text-lg font-heading font-bold text-slate-900 dark:text-white">OmniTool</h3>
               </div>
@@ -104,9 +96,9 @@ export const Layout: React.FC<LayoutProps> = ({ children, onNavigateHome, curren
             <div>
               <h4 className="font-heading font-semibold text-slate-900 dark:text-white mb-4">Tools</h4>
               <ul className="space-y-2 text-slate-500 dark:text-slate-400 text-sm">
-                <li><button onClick={onNavigateHome} className="hover:text-blue-500">Image Tools</button></li>
-                <li><button onClick={onNavigateHome} className="hover:text-blue-500">PDF Tools</button></li>
-                <li><button onClick={onNavigateHome} className="hover:text-blue-500">Converters</button></li>
+                <li><button onClick={onNavigateHome} className="hover:text-blue-500 transition-colors">Image Tools</button></li>
+                <li><button onClick={onNavigateHome} className="hover:text-blue-500 transition-colors">PDF Tools</button></li>
+                <li><button onClick={onNavigateHome} className="hover:text-blue-500 transition-colors">Converters</button></li>
               </ul>
             </div>
             <div>
@@ -118,7 +110,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, onNavigateHome, curren
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-slate-100 dark:border-slate-800 text-center text-slate-400 text-sm">
-            © {new Date().getFullYear()} OmniTool. 100% Client-Side.
+            © {new Date().getFullYear()} OmniTool. 100% Client-Side Architecture.
           </div>
         </div>
       </footer>
