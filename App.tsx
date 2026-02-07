@@ -341,19 +341,19 @@ function App() {
   }, [searchTerm]);
 
   const renderHome = () => (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <div className="text-center mb-16 relative">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div className="text-center mb-10 relative">
         {/* Decorative elements */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-32 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 blur-3xl"></div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-24 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 blur-3xl"></div>
         
-        <h2 className="text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold text-slate-900 dark:text-white tracking-tight mb-6 relative animate-slide-up">
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold text-slate-900 dark:text-white tracking-tight mb-6 relative animate-slide-up">
           All the tools you need,<br /> 
           <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">right in your browser.</span>
         </h2>
-        <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-8 leading-relaxed">Professional-grade tools that work instantly, privately, and beautifully in your browser</p>
+        <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-6 leading-relaxed">Professional-grade tools that work instantly, privately, and beautifully in your browser</p>
         
         {/* Search Bar */}
-        <div className="max-w-2xl mx-auto mt-10 relative group">
+        <div className="max-w-2xl mx-auto mt-6 relative group">
            <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-3xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
            <div className="relative">
              <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
