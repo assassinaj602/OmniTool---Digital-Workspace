@@ -98,7 +98,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, onNavigateHome, onNavi
                   <summary className="list-none px-3 py-2 rounded-lg text-sm font-semibold border border-zinc-200 dark:border-zinc-700 hover:border-violet-300 dark:hover:border-violet-700 cursor-pointer whitespace-nowrap">
                     {group.category}
                   </summary>
-                  <div className="absolute top-11 left-0 z-60 w-[22rem] max-h-80 overflow-y-auto rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-2xl p-2">
+                  <div className="absolute top-11 left-0 z-60 w-88 max-h-80 overflow-y-auto rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-2xl p-2">
                     <button
                       type="button"
                       onClick={() => onNavigateCategory(group.category)}

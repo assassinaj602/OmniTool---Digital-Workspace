@@ -40,7 +40,7 @@ export const PdfMerge: React.FC = () => {
       }
 
       const output = await merged.save();
-      const blob = new Blob([output], { type: 'application/pdf' });
+      const blob = new Blob([new Uint8Array(output)], { type: 'application/pdf' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
       link.download = 'merged.pdf';

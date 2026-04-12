@@ -75,7 +75,7 @@ export const PdfConverter: React.FC = () => {
         {!file ? (
             <Dropzone onFileSelect={processPdf} accept="application/pdf" label="Upload PDF" />
         ) : (
-            <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow border border-slate-200 dark:border-slate-700 h-[600px] flex flex-col transition-colors">
+            <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow border border-slate-200 dark:border-slate-700 h-150 flex flex-col transition-colors">
                 <div className="flex justify-between items-center mb-4 border-b border-slate-100 dark:border-slate-700 pb-4 flex-wrap gap-2">
                     <h3 className="font-bold text-lg truncate max-w-xs text-slate-800 dark:text-white">{file.name}</h3>
                     <div className="flex gap-2">
