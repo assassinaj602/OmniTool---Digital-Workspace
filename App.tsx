@@ -20,6 +20,8 @@ import { PdfToGif } from './tools/PdfToGif';
 import { ImageEnlarger } from './tools/ImageEnlarger';
 import { PdfConverter } from './tools/PdfConverter';
 import { BackgroundRemover } from './tools/BackgroundRemover';
+import { ZipExtractor } from './tools/ZipExtractor';
+import { ZipCreator } from './tools/ZipCreator';
 import { ToolCategory, ToolDef } from './types';
 import {
   ResizeIcon, ConvertIcon, LaughIcon, PdfIcon,
@@ -65,6 +67,8 @@ const PdfRotate = React.lazy(() => import('./tools/PdfRotate').then((module) => 
 const PdfWatermark = React.lazy(() => import('./tools/PdfWatermark').then((module) => ({ default: module.PdfWatermark })));
 const PdfProtect = React.lazy(() => import('./tools/PdfProtect').then((module) => ({ default: module.PdfProtect })));
 const PdfUnlock = React.lazy(() => import('./tools/PdfUnlock').then((module) => ({ default: module.PdfUnlock })));
+const PdfOrganize = React.lazy(() => import('./tools/PdfOrganize').then((module) => ({ default: module.PdfOrganize })));
+const PdfPageNumbers = React.lazy(() => import('./tools/PdfPageNumbers').then((module) => ({ default: module.PdfPageNumbers })));
 
 const setThemeClass = (dark: boolean) => {
   if (dark) {
@@ -260,6 +264,38 @@ function App() {
       icon: <ConvertIcon className="w-8 h-8 text-zinc-700" />,
       component: null
     },
+    {
+      id: 'webp-png',
+      title: 'WEBP to PNG',
+      description: 'Convert WEBP images to PNG.',
+      category: ToolCategory.CONVERSION,
+      icon: <ConvertIcon className="w-8 h-8 text-sky-500" />,
+      component: null
+    },
+    {
+      id: 'png-webp',
+      title: 'PNG to WEBP',
+      description: 'Convert PNG images to WEBP.',
+      category: ToolCategory.CONVERSION,
+      icon: <ConvertIcon className="w-8 h-8 text-sky-600" />,
+      component: null
+    },
+    {
+      id: 'jpg-webp',
+      title: 'JPG to WEBP',
+      description: 'Convert JPG images to WEBP.',
+      category: ToolCategory.CONVERSION,
+      icon: <ConvertIcon className="w-8 h-8 text-sky-700" />,
+      component: null
+    },
+    {
+      id: 'gif-png',
+      title: 'GIF to PNG',
+      description: 'Convert GIF to PNG (first frame).',
+      category: ToolCategory.CONVERSION,
+      icon: <ConvertIcon className="w-8 h-8 text-sky-800" />,
+      component: null
+    },
 
     {
       id: 'pdf-compress',
@@ -350,11 +386,44 @@ function App() {
       component: null
     },
     {
+      id: 'pdf-organize',
+      title: 'Organize PDF',
+      description: 'Reorder and delete PDF pages.',
+      category: ToolCategory.PDF,
+      icon: <PdfIcon className="w-8 h-8 text-rose-800" />,
+      component: null
+    },
+    {
+      id: 'pdf-page-numbers',
+      title: 'Page Numbers',
+      description: 'Add page numbers to PDF pages.',
+      category: ToolCategory.PDF,
+      icon: <PdfIcon className="w-8 h-8 text-rose-900" />,
+      component: null
+    },
+    {
       id: 'pdf-gif',
       title: 'PDF to GIF',
       description: 'Turn PDF pages into animated GIFs.',
       category: ToolCategory.PDF,
       icon: <GifIcon className="w-8 h-8 text-purple-600" />,
+      component: null
+    },
+
+    {
+      id: 'zip-extract',
+      title: 'Extract ZIP',
+      description: 'Unpack and download files from ZIP archives.',
+      category: ToolCategory.ARCHIVE,
+      icon: <BulkIcon className="w-8 h-8 text-amber-500" />,
+      component: null
+    },
+    {
+      id: 'zip-create',
+      title: 'Create ZIP',
+      description: 'Bundle files into a ZIP archive.',
+      category: ToolCategory.ARCHIVE,
+      icon: <BulkIcon className="w-8 h-8 text-amber-600" />,
       component: null
     },
   ], []);
@@ -435,6 +504,10 @@ function App() {
       case 'webp-jpg': return <ImageConverter defaultOutputFormat="image/jpeg" acceptedInputFormats={['image/webp']} title="WebP to JPG" />;
       case 'png-jpg': return <ImageConverter defaultOutputFormat="image/jpeg" acceptedInputFormats={['image/png']} title="PNG to JPG" />;
       case 'jpg-png': return <ImageConverter defaultOutputFormat="image/png" acceptedInputFormats={['image/jpeg']} title="JPG to PNG" />;
+      case 'webp-png': return <ImageConverter defaultOutputFormat="image/png" acceptedInputFormats={['image/webp']} title="WEBP to PNG" />;
+      case 'png-webp': return <ImageConverter defaultOutputFormat="image/webp" acceptedInputFormats={['image/png']} title="PNG to WEBP" />;
+      case 'jpg-webp': return <ImageConverter defaultOutputFormat="image/webp" acceptedInputFormats={['image/jpeg']} title="JPG to WEBP" />;
+      case 'gif-png': return <ImageConverter defaultOutputFormat="image/png" acceptedInputFormats={['image/gif']} title="GIF to PNG" />;
 
       case 'pdf-compress': return <PdfCompressor />;
       case 'pdf-convert': return <PdfConverter />;
@@ -444,12 +517,17 @@ function App() {
       case 'pdf-watermark': return <PdfWatermark />;
       case 'pdf-protect': return <PdfProtect />;
       case 'pdf-unlock': return <PdfUnlock />;
+      case 'pdf-organize': return <PdfOrganize />;
+      case 'pdf-page-numbers': return <PdfPageNumbers />;
 
       case 'img-pdf': return <ImageToPdf title="Image to PDF" />;
       case 'jpg-pdf': return <ImageToPdf acceptedFormats={['image/jpeg']} title="JPG to PDF" />;
       case 'png-pdf': return <ImageToPdf acceptedFormats={['image/png']} title="PNG to PDF" />;
 
       case 'pdf-gif': return <PdfToGif />;
+
+      case 'zip-extract': return <ZipExtractor />;
+      case 'zip-create': return <ZipCreator />;
 
       default: return <ImageResizer />;
     }
@@ -537,12 +615,14 @@ function App() {
   }, [tools]);
 
   const topToolGroups = useMemo(
-    () => displayCategories.map((category) => ({
-      category,
-      tools: tools
-        .filter((tool) => tool.category === category)
-        .map((tool) => ({ id: tool.id, title: tool.title })),
-    })),
+    () => displayCategories
+      .map((category) => ({
+        category,
+        tools: tools
+          .filter((tool) => tool.category === category)
+          .map((tool) => ({ id: tool.id, title: tool.title })),
+      }))
+      .filter((group) => group.tools.length > 0),
     [displayCategories, tools]
   );
 
@@ -837,6 +917,7 @@ function App() {
         onNavigateCategory={navigateCategory}
         onSelectTool={openTool}
         toolGroups={topToolGroups}
+        toolCount={tools.length}
         isDark={isDark}
         onToggleTheme={toggleTheme}
         currentToolTitle={currentTool?.title}

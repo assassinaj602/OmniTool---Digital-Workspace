@@ -16,12 +16,13 @@ interface LayoutProps {
   onNavigateCategory: (category: string) => void;
   onSelectTool: (id: string) => void;
   toolGroups: ToolNavGroup[];
+  toolCount: number;
   isDark: boolean;
   onToggleTheme: () => void;
   currentToolTitle?: string;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ children, onNavigateHome, onNavigateCategory, onSelectTool, toolGroups, isDark, onToggleTheme, currentToolTitle }) => {
+export const Layout: React.FC<LayoutProps> = ({ children, onNavigateHome, onNavigateCategory, onSelectTool, toolGroups, toolCount, isDark, onToggleTheme, currentToolTitle }) => {
 
   return (
     <div className="min-h-screen flex flex-col text-zinc-900 dark:text-zinc-100 transition-colors duration-300 relative bg-zinc-50 dark:bg-zinc-950">
@@ -63,7 +64,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, onNavigateHome, onNavi
 
               {/* Tools count badge */}
               <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-zinc-50 dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800">
-                <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">20+ Tools</span>
+                <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">{toolCount}+ Tools</span>
               </div>
               
               <button 
@@ -182,6 +183,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, onNavigateHome, onNavi
                 <li><button onClick={() => onNavigateCategory('All Tools')} className="hover:text-violet-600 dark:hover:text-violet-400 transition-colors">All Tools</button></li>
                 <li><button onClick={() => onNavigateCategory('Image Tools')} className="hover:text-violet-600 dark:hover:text-violet-400 transition-colors">Image Tools</button></li>
                 <li><button onClick={() => onNavigateCategory('PDF Tools')} className="hover:text-violet-600 dark:hover:text-violet-400 transition-colors">PDF Tools</button></li>
+                <li><button onClick={() => onNavigateCategory('Archive')} className="hover:text-violet-600 dark:hover:text-violet-400 transition-colors">Archive</button></li>
                 <li><button onClick={() => onNavigateCategory('Conversion')} className="hover:text-violet-600 dark:hover:text-violet-400 transition-colors">Converters</button></li>
               </ul>
             </div>

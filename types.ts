@@ -4,6 +4,7 @@ export enum ToolCategory {
   IMAGE = 'Image Tools',
   PDF = 'PDF Tools',
   CONVERSION = 'Conversion',
+  ARCHIVE = 'Archive Tools',
   FUN = 'Fun & Social',
 }
 
