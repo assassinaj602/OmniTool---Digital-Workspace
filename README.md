@@ -12,6 +12,7 @@ Privacy-first digital workspace for file processing in the browser.
 OmniTool is a browser-native workspace for image and document workflows. It is designed to feel like a production SaaS interface without requiring backend infrastructure.
 
 Core principles:
+
 - Client-side processing only
 - No server uploads
 - Fast, low-friction workflows
@@ -21,6 +22,7 @@ Core principles:
 ## Current Capabilities
 
 ### Image workflows
+
 - Resize and bulk resize
 - Compress and convert formats
 - Crop, rotate, and flip
@@ -31,6 +33,7 @@ Core principles:
 - Image upscaling
 
 ### Document workflows
+
 - Image to PDF
 - JPG to PDF
 - PNG to PDF
@@ -40,6 +43,7 @@ Core principles:
 - PDF text and document conversion
 
 ### Conversion workflows
+
 - HEIC to JPG
 - PNG to SVG
 - SVG conversion modes
@@ -50,6 +54,7 @@ Core principles:
 ## UX and Product Layer
 
 The app includes a product-oriented shell instead of a flat tool list:
+
 - Command palette with command-style actions and navigation
 - Pinned tools and recent tools
 - Category filters and searchable tool discovery
@@ -67,6 +72,7 @@ The app includes a product-oriented shell instead of a flat tool list:
 ## Local Development
 
 ### Prerequisites
+
 - Node.js 18+
 - npm
 
@@ -91,6 +97,7 @@ npm run build
 ## Deployment
 
 This project is configured for Vercel:
+
 - Build command: `npm run build`
 - Output directory: `dist`
 
