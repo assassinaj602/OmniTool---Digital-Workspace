@@ -628,72 +628,76 @@ function App() {
 
   const renderHome = () => (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <div className="text-center mb-14">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-violet-200 dark:border-violet-900 bg-violet-50/80 dark:bg-violet-950/40 text-violet-700 dark:text-violet-300 text-xs font-semibold uppercase tracking-[0.24em] mb-6">
+      <div className="text-center mb-10 md:mb-12">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-violet-200 dark:border-violet-900 bg-violet-50/80 dark:bg-violet-950/40 text-violet-700 dark:text-violet-300 text-xs font-semibold uppercase tracking-[0.24em] mb-7">
           <ShieldCheckIcon className="w-4 h-4" />
           Browser-native productivity platform
         </div>
 
-        <h2 className="text-4xl md:text-6xl font-heading font-extrabold text-zinc-900 dark:text-white tracking-tight mb-5 leading-tight">
-          Private file workflows for teams and individuals,
-          <span className="block bg-linear-to-r from-violet-600 to-fuchsia-500 bg-clip-text text-transparent">with no server dependency.</span>
+        <h2 className="text-5xl md:text-7xl font-heading font-black text-zinc-900 dark:text-white tracking-tight mb-6 leading-[1.05] max-w-5xl mx-auto">
+          Professional file workflows,
+          <span className="block mt-2 bg-linear-to-r from-violet-600 to-fuchsia-500 bg-clip-text text-transparent">zero uploads, zero friction.</span>
         </h2>
-        <p className="max-w-3xl mx-auto text-base md:text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed">
-          OmniTool combines conversion, image editing, and PDF workflows in a single browser workspace. Every action runs locally, supports dark and light mode, and is optimized for drag, browse, and paste-driven usage.
+
+        <p className="max-w-3xl mx-auto text-lg md:text-xl text-zinc-600 dark:text-zinc-400 leading-relaxed">
+          OmniTool gives you image, PDF, archive, and conversion workflows in one browser workspace. Every action runs locally on-device with a fast, production-grade interface.
         </p>
 
-        <div className="mt-8 flex flex-wrap justify-center gap-3">
+        <div className="mt-10 flex flex-wrap justify-center gap-4 items-center">
           <button
             type="button"
             onClick={() => openTool('resize')}
-            className="px-5 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-200 font-semibold hover:border-violet-300 dark:hover:border-violet-700 transition-colors"
+            className="px-8 py-4 rounded-2xl bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 font-semibold shadow-xl shadow-zinc-900/15 hover:shadow-2xl transition-all"
           >
-            Start with Image Resizer
+            Start Free: Open Image Resizer
           </button>
           <button
             type="button"
             onClick={() => navigateCategory(ToolCategory.PDF)}
-            className="px-5 py-3 rounded-xl bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 font-semibold shadow-lg hover:shadow-xl transition-shadow"
+            className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 hover:text-violet-600 dark:hover:text-violet-300 transition-colors"
           >
-            Explore PDF tools
+            Explore PDF tools instead
           </button>
         </div>
 
-        <div className="max-w-xl mx-auto mt-10 relative group">
-          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+        <div className="max-w-2xl mx-auto mt-12 text-left">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-zinc-400 dark:text-zinc-500 mb-3 px-1">Find your tool instantly</p>
+          <div className="relative group">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
             <svg className="h-5 w-5 text-zinc-300 dark:text-zinc-500 group-focus-within:text-violet-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
+            </div>
+            <input
+              id="tool-search"
+              type="text"
+              className="block w-full pl-11 pr-4 py-4 bg-white dark:bg-zinc-900 border-2 border-zinc-200 dark:border-zinc-700 rounded-2xl text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:ring-2 focus:ring-violet-500/30 focus:border-violet-500 dark:focus:border-violet-500 outline-none transition-all text-base"
+              placeholder="Search by tool name or task"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            {searchTerm && (
+              <button
+                onClick={() => setSearchTerm('')}
+                className="absolute inset-y-0 right-0 pr-4 flex items-center text-zinc-300 hover:text-zinc-500 dark:text-zinc-500 dark:hover:text-zinc-300"
+              >
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            )}
           </div>
-          <input
-            id="tool-search"
-            type="text"
-            className="block w-full pl-11 pr-4 py-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-2xl text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:ring-2 focus:ring-violet-500/40 focus:border-violet-400 dark:focus:border-violet-500 outline-none transition-all"
-            placeholder="Search tools or use top navigation categories"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          {searchTerm && (
-            <button
-              onClick={() => setSearchTerm('')}
-              className="absolute inset-y-0 right-0 pr-4 flex items-center text-zinc-300 hover:text-zinc-500 dark:text-zinc-500 dark:hover:text-zinc-300"
-            >
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          )}
         </div>
 
-        <div className="mt-6 flex flex-wrap justify-center gap-3">
+        <div className="mt-6 flex flex-wrap justify-center gap-2.5">
           {categoryFilters.map((category) => (
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
               className={`px-4 py-2 rounded-full text-sm font-semibold border transition-all duration-200 ${
                 selectedCategory === category
-                  ? 'bg-zinc-900 text-white border-zinc-900 dark:bg-white dark:text-zinc-900 dark:border-white shadow-lg shadow-zinc-900/10'
-                  : 'bg-white/80 dark:bg-zinc-900/80 text-zinc-600 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 hover:border-violet-300 dark:hover:border-violet-600 hover:text-violet-600 dark:hover:text-violet-300'
+                  ? 'bg-zinc-900 text-white border-zinc-900 dark:bg-white dark:text-zinc-900 dark:border-white shadow-lg shadow-zinc-900/10 scale-[1.02]'
+                  : 'bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 hover:border-violet-300 dark:hover:border-violet-600 hover:text-violet-600 dark:hover:text-violet-300'
               }`}
             >
               {category}
@@ -704,45 +708,6 @@ function App() {
           ))}
         </div>
       </div>
-
-      <section className="mb-14 grid md:grid-cols-3 gap-4">
-        <div className="rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 p-6">
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-2">Trusted workflow capacity</p>
-          <p className="text-2xl font-heading font-bold text-zinc-900 dark:text-zinc-100">20+ production tools</p>
-          <p className="text-sm mt-2 text-zinc-600 dark:text-zinc-400">Image editing, conversion, and PDF operations in one interface.</p>
-        </div>
-        <div className="rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 p-6">
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-2">Privacy architecture</p>
-          <p className="text-2xl font-heading font-bold text-zinc-900 dark:text-zinc-100">No server uploads</p>
-          <p className="text-sm mt-2 text-zinc-600 dark:text-zinc-400">Files are processed on-device and do not leave the browser.</p>
-        </div>
-        <div className="rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 p-6">
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-2">Input flexibility</p>
-          <p className="text-2xl font-heading font-bold text-zinc-900 dark:text-zinc-100">Drag, browse, paste</p>
-          <p className="text-sm mt-2 text-zinc-600 dark:text-zinc-400">Supports multiple input patterns for faster task completion.</p>
-        </div>
-      </section>
-
-      <section className="mb-14">
-        <h3 className="text-xl font-heading font-bold text-zinc-900 dark:text-zinc-100 mb-5">Recommended workflows</h3>
-        <div className="grid md:grid-cols-3 gap-4">
-          <button onClick={() => openTool('resize')} className="text-left rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900/70 p-5 hover:border-violet-300 dark:hover:border-violet-700 transition-colors">
-            <p className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">Creator workflow</p>
-            <h4 className="text-lg font-heading font-bold mt-1 text-zinc-900 dark:text-zinc-100">Resize then compress</h4>
-            <p className="text-sm mt-2 text-zinc-600 dark:text-zinc-400">Prepare social assets quickly with lighter file sizes.</p>
-          </button>
-          <button onClick={() => openTool('pdf-convert')} className="text-left rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900/70 p-5 hover:border-violet-300 dark:hover:border-violet-700 transition-colors">
-            <p className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">Document workflow</p>
-            <h4 className="text-lg font-heading font-bold mt-1 text-zinc-900 dark:text-zinc-100">Extract and repurpose PDF</h4>
-            <p className="text-sm mt-2 text-zinc-600 dark:text-zinc-400">Convert PDF content to editable formats in one step.</p>
-          </button>
-          <button onClick={() => openTool('svg-convert')} className="text-left rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900/70 p-5 hover:border-violet-300 dark:hover:border-violet-700 transition-colors">
-            <p className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">Design workflow</p>
-            <h4 className="text-lg font-heading font-bold mt-1 text-zinc-900 dark:text-zinc-100">Vector and raster bridge</h4>
-            <p className="text-sm mt-2 text-zinc-600 dark:text-zinc-400">Move assets between PNG, JPG, and SVG with precision.</p>
-          </button>
-        </div>
-      </section>
 
       {favoriteTools.length > 0 && !searchTerm && (
         <section className="mb-14">
@@ -858,6 +823,45 @@ function App() {
         );
       })}
 
+      <section className="mb-14 grid md:grid-cols-3 gap-4">
+        <div className="rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 p-6">
+          <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-2">Trusted workflow capacity</p>
+          <p className="text-2xl font-heading font-bold text-zinc-900 dark:text-zinc-100">{tools.length}+ production tools</p>
+          <p className="text-sm mt-2 text-zinc-600 dark:text-zinc-400">Image editing, conversion, and PDF operations in one interface.</p>
+        </div>
+        <div className="rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 p-6">
+          <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-2">Privacy architecture</p>
+          <p className="text-2xl font-heading font-bold text-zinc-900 dark:text-zinc-100">No server uploads</p>
+          <p className="text-sm mt-2 text-zinc-600 dark:text-zinc-400">Files are processed on-device and do not leave the browser.</p>
+        </div>
+        <div className="rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 p-6">
+          <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-2">Input flexibility</p>
+          <p className="text-2xl font-heading font-bold text-zinc-900 dark:text-zinc-100">Drag, browse, paste</p>
+          <p className="text-sm mt-2 text-zinc-600 dark:text-zinc-400">Supports multiple input patterns for faster task completion.</p>
+        </div>
+      </section>
+
+      <section className="mb-14">
+        <h3 className="text-xl font-heading font-bold text-zinc-900 dark:text-zinc-100 mb-5">Recommended workflows</h3>
+        <div className="grid md:grid-cols-3 gap-4">
+          <button onClick={() => openTool('resize')} className="text-left rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900/70 p-5 hover:border-violet-300 dark:hover:border-violet-700 transition-colors">
+            <p className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">Creator workflow</p>
+            <h4 className="text-lg font-heading font-bold mt-1 text-zinc-900 dark:text-zinc-100">Resize then compress</h4>
+            <p className="text-sm mt-2 text-zinc-600 dark:text-zinc-400">Prepare social assets quickly with lighter file sizes.</p>
+          </button>
+          <button onClick={() => openTool('pdf-convert')} className="text-left rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900/70 p-5 hover:border-violet-300 dark:hover:border-violet-700 transition-colors">
+            <p className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">Document workflow</p>
+            <h4 className="text-lg font-heading font-bold mt-1 text-zinc-900 dark:text-zinc-100">Extract and repurpose PDF</h4>
+            <p className="text-sm mt-2 text-zinc-600 dark:text-zinc-400">Convert PDF content to editable formats in one step.</p>
+          </button>
+          <button onClick={() => openTool('svg-convert')} className="text-left rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900/70 p-5 hover:border-violet-300 dark:hover:border-violet-700 transition-colors">
+            <p className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">Design workflow</p>
+            <h4 className="text-lg font-heading font-bold mt-1 text-zinc-900 dark:text-zinc-100">Vector and raster bridge</h4>
+            <p className="text-sm mt-2 text-zinc-600 dark:text-zinc-400">Move assets between PNG, JPG, and SVG with precision.</p>
+          </button>
+        </div>
+      </section>
+
       {!searchTerm && (
         <section className="mt-20 relative rounded-3xl overflow-hidden bg-zinc-900 text-white border border-zinc-700">
           <div className="absolute inset-0 opacity-[0.15] bg-[radial-gradient(#8b5cf6_1px,transparent_1px)] bg-size-[20px_20px]"></div>
@@ -918,6 +922,7 @@ function App() {
         onSelectTool={openTool}
         toolGroups={topToolGroups}
         toolCount={tools.length}
+        selectedCategory={selectedCategory}
         isDark={isDark}
         onToggleTheme={toggleTheme}
         currentToolTitle={currentTool?.title}

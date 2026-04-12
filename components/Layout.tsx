@@ -17,12 +17,15 @@ interface LayoutProps {
   onSelectTool: (id: string) => void;
   toolGroups: ToolNavGroup[];
   toolCount: number;
+  selectedCategory: string;
   isDark: boolean;
   onToggleTheme: () => void;
   currentToolTitle?: string;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ children, onNavigateHome, onNavigateCategory, onSelectTool, toolGroups, toolCount, isDark, onToggleTheme, currentToolTitle }) => {
+export const Layout: React.FC<LayoutProps> = ({ children, onNavigateHome, onNavigateCategory, onSelectTool, toolGroups, toolCount, selectedCategory, isDark, onToggleTheme, currentToolTitle }) => {
+  const [hoveredCategory, setHoveredCategory] = React.useState<string | null>(null);
+  const hoveredGroup = toolGroups.find((group) => group.category === hoveredCategory) || null;
 
   return (
     <div className="min-h-screen flex flex-col text-zinc-900 dark:text-zinc-100 transition-colors duration-300 relative bg-zinc-50 dark:bg-zinc-950">
@@ -32,7 +35,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, onNavigateHome, onNavi
         <div className="absolute bottom-0 left-0 w-150 h-150 bg-fuchsia-500/5 rounded-full blur-3xl animate-pulse-slow" style={{animationDelay: '1s'}}></div>
       </div>
 
-      <header className="sticky top-0 z-50 bg-zinc-50/90 dark:bg-zinc-950/90 backdrop-blur-xl border-b border-zinc-200 dark:border-zinc-700">
+      <header className="sticky top-0 z-50 bg-zinc-50/95 dark:bg-zinc-950/95 backdrop-blur-xl border-b border-zinc-200 dark:border-zinc-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center cursor-pointer group" onClick={onNavigateHome}>
@@ -55,7 +58,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, onNavigateHome, onNavi
                 </>
               )}
             </div>
-            
+
             <div className="flex items-center space-x-3">
               <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-emerald-50 dark:bg-emerald-950/40 rounded-lg border border-emerald-200 dark:border-emerald-900 text-emerald-700 dark:text-emerald-300">
                 <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
@@ -85,43 +88,109 @@ export const Layout: React.FC<LayoutProps> = ({ children, onNavigateHome, onNavi
             </div>
           </div>
 
-          <div className="py-3 border-t border-zinc-200 dark:border-zinc-800">
+          <div
+            className="hidden lg:block py-3 border-t border-zinc-200 dark:border-zinc-800"
+            onMouseLeave={() => setHoveredCategory(null)}
+          >
             <div className="flex items-center gap-2 overflow-x-auto pb-1">
               <button
                 type="button"
                 onClick={onNavigateHome}
-                className="px-3 py-2 rounded-lg text-sm font-semibold border border-zinc-200 dark:border-zinc-700 hover:border-violet-300 dark:hover:border-violet-700 whitespace-nowrap"
+                className={`px-3 py-2 rounded-lg text-sm font-semibold border whitespace-nowrap transition-colors ${
+                  selectedCategory === 'All Tools'
+                    ? 'bg-zinc-900 text-white border-zinc-900 dark:bg-white dark:text-zinc-900 dark:border-white'
+                    : 'border-zinc-200 dark:border-zinc-700 hover:border-violet-300 dark:hover:border-violet-700'
+                }`}
+              >
+                All Tools
+              </button>
+
+              {toolGroups.map((group) => (
+                <button
+                  key={group.category}
+                  type="button"
+                  onMouseEnter={() => setHoveredCategory(group.category)}
+                  onFocus={() => setHoveredCategory(group.category)}
+                  onClick={() => onNavigateCategory(group.category)}
+                  className={`px-3 py-2 rounded-lg text-sm font-semibold border whitespace-nowrap transition-colors ${
+                    selectedCategory === group.category
+                      ? 'bg-zinc-900 text-white border-zinc-900 dark:bg-white dark:text-zinc-900 dark:border-white'
+                      : 'border-zinc-200 dark:border-zinc-700 hover:border-violet-300 dark:hover:border-violet-700'
+                  }`}
+                >
+                  {group.category}
+                </button>
+              ))}
+            </div>
+
+            {hoveredGroup && (
+              <div className="mt-3 rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-2xl p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <button
+                    type="button"
+                    onClick={() => onNavigateCategory(hoveredGroup.category)}
+                    className="text-xs font-bold uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-400 hover:text-violet-600 dark:hover:text-violet-300"
+                  >
+                    View all in {hoveredGroup.category}
+                  </button>
+                  <span className="text-xs font-semibold text-zinc-400 dark:text-zinc-500">{hoveredGroup.tools.length} tools</span>
+                </div>
+
+                <div className="grid grid-cols-2 xl:grid-cols-4 gap-2">
+                  {hoveredGroup.tools.map((tool) => (
+                    <button
+                      key={tool.id}
+                      type="button"
+                      onClick={() => onSelectTool(tool.id)}
+                      className="text-left px-3 py-2 text-sm rounded-lg border border-zinc-200 dark:border-zinc-700 hover:border-violet-300 dark:hover:border-violet-700 hover:bg-violet-50 dark:hover:bg-violet-950/30"
+                    >
+                      {tool.title}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="py-3 border-t border-zinc-200 dark:border-zinc-800 lg:hidden">
+            <div className="flex items-center gap-2 overflow-x-auto pb-1">
+              <button
+                type="button"
+                onClick={onNavigateHome}
+                className={`px-3 py-2 rounded-lg text-sm font-semibold border whitespace-nowrap transition-colors ${
+                  selectedCategory === 'All Tools'
+                    ? 'bg-zinc-900 text-white border-zinc-900 dark:bg-white dark:text-zinc-900 dark:border-white'
+                    : 'border-zinc-200 dark:border-zinc-700 hover:border-violet-300 dark:hover:border-violet-700'
+                }`}
               >
                 All Tools
               </button>
               {toolGroups.map((group) => (
-                <details key={group.category} className="relative">
-                  <summary className="list-none px-3 py-2 rounded-lg text-sm font-semibold border border-zinc-200 dark:border-zinc-700 hover:border-violet-300 dark:hover:border-violet-700 cursor-pointer whitespace-nowrap">
-                    {group.category}
-                  </summary>
-                  <div className="absolute top-11 left-0 z-60 w-88 max-h-80 overflow-y-auto rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-2xl p-2">
-                    <button
-                      type="button"
-                      onClick={() => onNavigateCategory(group.category)}
-                      className="w-full text-left px-3 py-2 text-xs uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md"
-                    >
-                      View all in {group.category}
-                    </button>
-                    <div className="h-px bg-zinc-200 dark:bg-zinc-700 my-2" />
-                    <div className="grid grid-cols-1 gap-1">
-                      {group.tools.map((tool) => (
-                        <button
-                          key={tool.id}
-                          type="button"
-                          onClick={() => onSelectTool(tool.id)}
-                          className="text-left px-3 py-2 text-sm rounded-md hover:bg-violet-50 dark:hover:bg-violet-950/30"
-                        >
-                          {tool.title}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </details>
+                <button
+                  key={group.category}
+                  type="button"
+                  onClick={() => onNavigateCategory(group.category)}
+                  className={`px-3 py-2 rounded-lg text-sm font-semibold border whitespace-nowrap transition-colors ${
+                    selectedCategory === group.category
+                      ? 'bg-zinc-900 text-white border-zinc-900 dark:bg-white dark:text-zinc-900 dark:border-white'
+                      : 'border-zinc-200 dark:border-zinc-700 hover:border-violet-300 dark:hover:border-violet-700'
+                  }`}
+                >
+                  {group.category}
+                </button>
+              ))}
+            </div>
+
+            <div className="mt-3 flex items-center gap-2 overflow-x-auto pb-1">
+              {toolGroups.flatMap((group) => group.tools).slice(0, 8).map((tool) => (
+                <button
+                  key={tool.id}
+                  type="button"
+                  onClick={() => onSelectTool(tool.id)}
+                  className="px-3 py-1.5 rounded-full text-xs font-semibold border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 hover:border-violet-300 dark:hover:border-violet-700 whitespace-nowrap"
+                >
+                  {tool.title}
+                </button>
               ))}
             </div>
           </div>
