@@ -8,7 +8,6 @@ interface ToolWorkspaceShellProps {
   isFavorite: boolean;
   onBack: () => void;
   onToggleFavorite: () => void;
-  onOpenCommandPalette: () => void;
   children: React.ReactNode;
 }
 
@@ -19,7 +18,6 @@ export const ToolWorkspaceShell: React.FC<ToolWorkspaceShellProps> = ({
   isFavorite,
   onBack,
   onToggleFavorite,
-  onOpenCommandPalette,
   children,
 }) => {
   return (
@@ -52,13 +50,6 @@ export const ToolWorkspaceShell: React.FC<ToolWorkspaceShellProps> = ({
                 className="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-200 hover:border-violet-300 dark:hover:border-violet-700 transition-colors text-sm font-semibold"
               >
                 Back to workspace
-              </button>
-              <button
-                type="button"
-                onClick={onOpenCommandPalette}
-                className="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-200 hover:border-violet-300 dark:hover:border-violet-700 transition-colors text-sm font-semibold"
-              >
-                Commands
               </button>
               <button
                 type="button"

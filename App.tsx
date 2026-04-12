@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Layout } from './components/Layout';
 import { NotificationProvider } from './components/NotificationContext';
-import { CommandItem, CommandPalette } from './components/CommandPalette';
 import { ToolWorkspaceShell } from './components/ToolWorkspaceShell';
 import { ImageResizer } from './tools/ImageResizer';
 import { ImageConverter } from './tools/ImageConverter';
@@ -60,6 +59,13 @@ const setToolHash = (toolId: string) => {
   window.location.hash = `tool=${encodeURIComponent(toolId)}`;
 };
 
+const PdfMerge = React.lazy(() => import('./tools/PdfMerge').then((module) => ({ default: module.PdfMerge })));
+const PdfSplit = React.lazy(() => import('./tools/PdfSplit').then((module) => ({ default: module.PdfSplit })));
+const PdfRotate = React.lazy(() => import('./tools/PdfRotate').then((module) => ({ default: module.PdfRotate })));
+const PdfWatermark = React.lazy(() => import('./tools/PdfWatermark').then((module) => ({ default: module.PdfWatermark })));
+const PdfProtect = React.lazy(() => import('./tools/PdfProtect').then((module) => ({ default: module.PdfProtect })));
+const PdfUnlock = React.lazy(() => import('./tools/PdfUnlock').then((module) => ({ default: module.PdfUnlock })));
+
 const setThemeClass = (dark: boolean) => {
   if (dark) {
     document.documentElement.classList.add('dark');
@@ -74,7 +80,6 @@ function App() {
   const [currentToolId, setCurrentToolId] = useState<string | null>(() => readHashToolId());
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>(ALL_CATEGORY);
-  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
 
   const [favoriteToolIds, setFavoriteToolIds] = useState<string[]>(() => {
@@ -297,6 +302,54 @@ function App() {
       component: null
     },
     {
+      id: 'pdf-merge',
+      title: 'Merge PDF',
+      description: 'Combine multiple PDFs into one file.',
+      category: ToolCategory.PDF,
+      icon: <PdfIcon className="w-8 h-8 text-rose-500" />,
+      component: null
+    },
+    {
+      id: 'pdf-split',
+      title: 'Split PDF',
+      description: 'Extract selected pages from a PDF.',
+      category: ToolCategory.PDF,
+      icon: <PdfIcon className="w-8 h-8 text-rose-400" />,
+      component: null
+    },
+    {
+      id: 'pdf-rotate',
+      title: 'Rotate PDF',
+      description: 'Rotate pages and export a new PDF.',
+      category: ToolCategory.PDF,
+      icon: <RotateIcon className="w-8 h-8 text-rose-600" />,
+      component: null
+    },
+    {
+      id: 'pdf-watermark',
+      title: 'Watermark PDF',
+      description: 'Stamp text watermark on every page.',
+      category: ToolCategory.PDF,
+      icon: <PdfIcon className="w-8 h-8 text-rose-700" />,
+      component: null
+    },
+    {
+      id: 'pdf-protect',
+      title: 'Protect PDF',
+      description: 'Add password protection to PDF files.',
+      category: ToolCategory.PDF,
+      icon: <ShieldCheckIcon className="w-8 h-8 text-emerald-600" />,
+      component: null
+    },
+    {
+      id: 'pdf-unlock',
+      title: 'Unlock PDF',
+      description: 'Remove password protection from PDFs.',
+      category: ToolCategory.PDF,
+      icon: <ShieldCheckIcon className="w-8 h-8 text-amber-600" />,
+      component: null
+    },
+    {
       id: 'pdf-gif',
       title: 'PDF to GIF',
       description: 'Turn PDF pages into animated GIFs.',
@@ -325,21 +378,18 @@ function App() {
     setCurrentToolId(id);
     setSelectedCategory(ALL_CATEGORY);
     setToolHash(id);
-    setIsCommandPaletteOpen(false);
   };
 
   const navigateHome = () => {
     setCurrentToolId(null);
     setSelectedCategory(ALL_CATEGORY);
     clearHash();
-    setIsCommandPaletteOpen(false);
   };
 
   const navigateCategory = (category: string) => {
     setCurrentToolId(null);
     setSelectedCategory(category);
     clearHash();
-    setIsCommandPaletteOpen(false);
   };
 
   const toggleFavorite = (id: string) => {
@@ -388,6 +438,12 @@ function App() {
 
       case 'pdf-compress': return <PdfCompressor />;
       case 'pdf-convert': return <PdfConverter />;
+      case 'pdf-merge': return <PdfMerge />;
+      case 'pdf-split': return <PdfSplit />;
+      case 'pdf-rotate': return <PdfRotate />;
+      case 'pdf-watermark': return <PdfWatermark />;
+      case 'pdf-protect': return <PdfProtect />;
+      case 'pdf-unlock': return <PdfUnlock />;
 
       case 'img-pdf': return <ImageToPdf title="Image to PDF" />;
       case 'jpg-pdf': return <ImageToPdf acceptedFormats={['image/jpeg']} title="JPG to PDF" />;
@@ -413,17 +469,18 @@ function App() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
-        setIsCommandPaletteOpen(true);
+        const input = document.getElementById('tool-search') as HTMLInputElement | null;
+        input?.focus();
       }
 
-      if (e.key === 'Escape' && !isCommandPaletteOpen) {
+      if (e.key === 'Escape') {
         navigateHome();
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isCommandPaletteOpen]);
+  }, []);
 
   useEffect(() => {
     const syncFromHash = () => {
@@ -479,55 +536,15 @@ function App() {
     }, {});
   }, [tools]);
 
-  const commandPaletteCommands = useMemo<CommandItem[]>(() => {
-    const baseCommands: CommandItem[] = [
-      {
-        id: 'cmd-home',
-        label: 'Go to workspace home',
-        description: 'Return to the main OmniTool dashboard',
-        section: 'Navigation',
-        keywords: ['home', 'dashboard'],
-        shortcut: 'Esc',
-        action: navigateHome,
-      },
-      {
-        id: 'cmd-theme',
-        label: isDark ? 'Switch to light mode' : 'Switch to dark mode',
-        description: 'Toggle visual theme',
-        section: 'Actions',
-        keywords: ['theme', 'dark', 'light', 'appearance'],
-        action: toggleTheme,
-      },
-      {
-        id: 'cmd-clear-search',
-        label: 'Clear tool search',
-        description: 'Reset current search filters',
-        section: 'Actions',
-        keywords: ['clear', 'search', 'reset'],
-        action: () => setSearchTerm(''),
-      },
-    ];
-
-    const categoryCommands = displayCategories.map((category) => ({
-      id: `cat-${category}`,
-      label: `Show ${category}`,
-      description: `Filter home view to ${category.toLowerCase()}`,
-      section: 'Categories',
-      keywords: ['category', category.toLowerCase()],
-      action: () => navigateCategory(category),
-    }));
-
-    const toolCommands = tools.map((tool) => ({
-      id: `tool-${tool.id}`,
-      label: `Open ${tool.title}`,
-      description: tool.description,
-      section: 'Tools',
-      keywords: [tool.category, tool.title, tool.description],
-      action: () => openTool(tool.id),
-    }));
-
-    return [...baseCommands, ...categoryCommands, ...toolCommands];
-  }, [displayCategories, isDark, tools]);
+  const topToolGroups = useMemo(
+    () => displayCategories.map((category) => ({
+      category,
+      tools: tools
+        .filter((tool) => tool.category === category)
+        .map((tool) => ({ id: tool.id, title: tool.title })),
+    })),
+    [displayCategories, tools]
+  );
 
   const renderHome = () => (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -548,17 +565,17 @@ function App() {
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <button
             type="button"
-            onClick={() => setIsCommandPaletteOpen(true)}
-            className="px-5 py-3 rounded-xl bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 font-semibold shadow-lg hover:shadow-xl transition-shadow"
-          >
-            Open command palette
-          </button>
-          <button
-            type="button"
             onClick={() => openTool('resize')}
             className="px-5 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-200 font-semibold hover:border-violet-300 dark:hover:border-violet-700 transition-colors"
           >
             Start with Image Resizer
+          </button>
+          <button
+            type="button"
+            onClick={() => navigateCategory(ToolCategory.PDF)}
+            className="px-5 py-3 rounded-xl bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 font-semibold shadow-lg hover:shadow-xl transition-shadow"
+          >
+            Explore PDF tools
           </button>
         </div>
 
@@ -572,7 +589,7 @@ function App() {
             id="tool-search"
             type="text"
             className="block w-full pl-11 pr-4 py-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-2xl text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:ring-2 focus:ring-violet-500/40 focus:border-violet-400 dark:focus:border-violet-500 outline-none transition-all"
-            placeholder="Search tools or press Ctrl + K for commands"
+            placeholder="Search tools or use top navigation categories"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -818,16 +835,12 @@ function App() {
       <Layout
         onNavigateHome={navigateHome}
         onNavigateCategory={navigateCategory}
+        onSelectTool={openTool}
+        toolGroups={topToolGroups}
         isDark={isDark}
         onToggleTheme={toggleTheme}
         currentToolTitle={currentTool?.title}
       >
-        <CommandPalette
-          isOpen={isCommandPaletteOpen}
-          onClose={() => setIsCommandPaletteOpen(false)}
-          commands={commandPaletteCommands}
-        />
-
         {currentTool ? (
           <ToolWorkspaceShell
             title={currentTool.title}
@@ -836,9 +849,16 @@ function App() {
             isFavorite={favoriteToolIds.includes(currentTool.id)}
             onBack={navigateHome}
             onToggleFavorite={() => toggleFavorite(currentTool.id)}
-            onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
           >
-            {getToolComponent(currentTool.id)}
+            <React.Suspense
+              fallback={
+                <div className="py-16 text-center text-slate-500 dark:text-slate-400">
+                  Loading tool...
+                </div>
+              }
+            >
+              {getToolComponent(currentTool.id)}
+            </React.Suspense>
           </ToolWorkspaceShell>
         ) : (
           renderHome()
