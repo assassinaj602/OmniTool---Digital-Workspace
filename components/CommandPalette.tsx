@@ -64,7 +64,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[120]">
+    <div className="fixed inset-0 z-120">
       <button
         type="button"
         aria-label="Close command palette"
@@ -72,7 +72,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
         onClick={onClose}
       />
 
-      <div className="relative z-[121] max-w-2xl mx-auto mt-16 px-4">
+      <div className="relative z-121 max-w-2xl mx-auto mt-16 px-4">
         <div className="rounded-3xl border border-zinc-200/80 dark:border-zinc-700 bg-white/95 dark:bg-zinc-900/95 shadow-2xl overflow-hidden">
           <div className="border-b border-zinc-200 dark:border-zinc-700 px-4 py-3">
             <input

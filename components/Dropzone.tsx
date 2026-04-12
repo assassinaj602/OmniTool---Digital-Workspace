@@ -93,7 +93,7 @@ export const Dropzone: React.FC<DropzoneProps> = ({
       />
       
       {/* Background decoration */}
-      <div className="absolute inset-0 bg-grid-slate-100 dark:bg-grid-slate-800 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] pointer-events-none opacity-50"></div>
+      <div className="absolute inset-0 bg-grid-slate-100 dark:bg-grid-slate-800 mask-[linear-gradient(0deg,white,rgba(255,255,255,0.6))] pointer-events-none opacity-50"></div>
 
       <div className={`
         relative z-10 p-5 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 mb-5 

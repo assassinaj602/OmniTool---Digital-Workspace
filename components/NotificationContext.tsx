@@ -42,18 +42,18 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
   return (
     <NotificationContext.Provider value={{ notify }}>
       {children}
-      <div className="fixed bottom-6 right-6 z-[100] flex flex-col gap-3 pointer-events-none">
+      <div className="fixed bottom-6 right-6 z-100 flex flex-col gap-3 pointer-events-none">
         {notifications.map((n) => (
           <div
             key={n.id}
             className={`
-              pointer-events-auto min-w-[300px] max-w-sm w-full bg-white dark:bg-slate-800 shadow-lg rounded-xl p-4 flex items-center gap-3
+              pointer-events-auto min-w-75 max-w-sm w-full bg-white dark:bg-slate-800 shadow-lg rounded-xl p-4 flex items-center gap-3
               border-l-4 transition-all duration-300 animate-slide-up
               ${n.type === 'success' ? 'border-green-500' : n.type === 'error' ? 'border-red-500' : 'border-blue-500'}
             `}
           >
             <div className={`
-              flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center
+              shrink-0 w-6 h-6 rounded-full flex items-center justify-center
               ${n.type === 'success' ? 'bg-green-100 text-green-600' : n.type === 'error' ? 'bg-red-100 text-red-600' : 'bg-blue-100 text-blue-600'}
             `}>
               {n.type === 'success' && (
@@ -72,7 +72,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
                 </svg>
               )}
             </div>
-            <p className="text-sm font-medium text-slate-800 dark:text-white flex-grow">{n.message}</p>
+            <p className="text-sm font-medium text-slate-800 dark:text-white grow">{n.message}</p>
             <button 
               onClick={() => removeNotification(n.id)}
               className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"

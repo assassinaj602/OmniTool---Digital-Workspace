@@ -15,8 +15,8 @@ export const Layout: React.FC<LayoutProps> = ({ children, onNavigateHome, onNavi
     <div className="min-h-screen flex flex-col text-zinc-900 dark:text-zinc-100 transition-colors duration-300 relative bg-zinc-50 dark:bg-zinc-950">
       {/* Animated background elements (Dark Mode Only) */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none hidden dark:block">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-violet-500/5 rounded-full blur-3xl animate-pulse-slow"></div>
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-fuchsia-500/5 rounded-full blur-3xl animate-pulse-slow" style={{animationDelay: '1s'}}></div>
+        <div className="absolute top-0 right-0 w-125 h-125 bg-violet-500/5 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div className="absolute bottom-0 left-0 w-150 h-150 bg-fuchsia-500/5 rounded-full blur-3xl animate-pulse-slow" style={{animationDelay: '1s'}}></div>
       </div>
 
       <header className="sticky top-0 z-50 bg-zinc-50/90 dark:bg-zinc-950/90 backdrop-blur-xl border-b border-zinc-200 dark:border-zinc-700">
@@ -74,13 +74,13 @@ export const Layout: React.FC<LayoutProps> = ({ children, onNavigateHome, onNavi
         </div>
       </header>
 
-      <main className="flex-grow w-full relative z-10">
+      <main className="grow w-full relative z-10">
         {children}
       </main>
 
       <footer className="bg-zinc-50 dark:bg-zinc-950 border-t border-zinc-200 dark:border-zinc-700 py-12 mt-12 relative z-10 overflow-hidden">
         {/* Decorative gradient line */}
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-400 to-transparent opacity-0 dark:opacity-40" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-violet-400 to-transparent opacity-0 dark:opacity-40" />
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-12">

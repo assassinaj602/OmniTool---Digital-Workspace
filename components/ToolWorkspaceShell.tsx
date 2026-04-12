@@ -24,7 +24,7 @@ export const ToolWorkspaceShell: React.FC<ToolWorkspaceShellProps> = ({
 }) => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 animate-fade-in">
-      <div className="rounded-3xl border border-zinc-200 dark:border-zinc-700 bg-gradient-to-br from-white to-zinc-50 dark:from-zinc-900 dark:to-zinc-950 shadow-xl overflow-hidden">
+      <div className="rounded-3xl border border-zinc-200 dark:border-zinc-700 bg-linear-to-br from-white to-zinc-50 dark:from-zinc-900 dark:to-zinc-950 shadow-xl overflow-hidden">
         <div className="border-b border-zinc-200 dark:border-zinc-700 px-5 md:px-8 py-5 md:py-6">
           <div className="flex flex-wrap items-center gap-3 mb-4">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-full">

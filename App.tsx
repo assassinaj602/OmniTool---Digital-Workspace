@@ -93,7 +93,7 @@ function App() {
     }
   });
 
-  const tools: ToolDef[] = [
+  const tools = useMemo<ToolDef[]>(() => [
     {
       id: 'resize',
       title: 'Image Resizer',
@@ -304,7 +304,15 @@ function App() {
       icon: <GifIcon className="w-8 h-8 text-purple-600" />,
       component: null
     },
-  ];
+  ], []);
+
+  const renderCompactIcon = (icon: React.ReactNode) => {
+    if (React.isValidElement<{ className?: string }>(icon)) {
+      return React.cloneElement(icon, { className: 'w-5 h-5' });
+    }
+
+    return icon;
+  };
 
   const toolById = useMemo(() => {
     return tools.reduce<Record<string, ToolDef>>((acc, tool) => {
@@ -531,7 +539,7 @@ function App() {
 
         <h2 className="text-4xl md:text-6xl font-heading font-extrabold text-zinc-900 dark:text-white tracking-tight mb-5 leading-tight">
           Private file workflows for teams and individuals,
-          <span className="block bg-gradient-to-r from-violet-600 to-fuchsia-500 bg-clip-text text-transparent">with no server dependency.</span>
+          <span className="block bg-linear-to-r from-violet-600 to-fuchsia-500 bg-clip-text text-transparent">with no server dependency.</span>
         </h2>
         <p className="max-w-3xl mx-auto text-base md:text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed">
           OmniTool combines conversion, image editing, and PDF workflows in a single browser workspace. Every action runs locally, supports dark and light mode, and is optimized for drag, browse, and paste-driven usage.
@@ -656,7 +664,7 @@ function App() {
                 className="group bg-zinc-900 text-white rounded-2xl p-4 border border-zinc-800 hover:border-violet-500/60 hover:shadow-lg hover:shadow-violet-500/10 transition-all duration-200 text-left flex items-center gap-3"
               >
                 <div className="p-2.5 rounded-xl bg-white/5 group-hover:bg-violet-500/10 transition-colors">
-                  {React.cloneElement(tool.icon as React.ReactElement, { className: 'w-5 h-5' })}
+                  {renderCompactIcon(tool.icon)}
                 </div>
                 <div className="min-w-0">
                   <div className="font-semibold truncate">{tool.title}</div>
@@ -684,7 +692,7 @@ function App() {
                   className="bg-zinc-50 dark:bg-zinc-800 p-3.5 rounded-xl border border-zinc-100 dark:border-zinc-700 hover:border-violet-300 dark:hover:border-violet-600 cursor-pointer flex items-center gap-3 transition-all hover:bg-violet-50 dark:hover:bg-violet-950/30"
                 >
                   <div className="p-1.5 rounded-lg">
-                    {React.cloneElement(tool.icon as React.ReactElement, { className: 'w-5 h-5' })}
+                    {renderCompactIcon(tool.icon)}
                   </div>
                   <span className="font-semibold text-zinc-700 dark:text-zinc-300 text-sm">{tool.title}</span>
                 </button>
@@ -719,7 +727,7 @@ function App() {
                     onClick={() => openTool(tool.id)}
                     className="group bg-white dark:bg-zinc-800 rounded-2xl p-5 border border-zinc-200 dark:border-zinc-700 hover:border-violet-300 dark:hover:border-violet-600 hover:shadow-lg hover:shadow-violet-500/5 transition-all duration-200 cursor-pointer hover:-translate-y-0.5 h-full flex flex-col relative overflow-hidden text-left"
                   >
-                    <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-violet-500 to-fuchsia-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+                    <div className="absolute top-0 left-0 w-full h-0.5 bg-linear-to-r from-violet-500 to-fuchsia-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
                     <button
                       type="button"
                       aria-label={isFavorite ? `Remove ${tool.title} from favorites` : `Add ${tool.title} to favorites`}
@@ -755,7 +763,7 @@ function App() {
 
       {!searchTerm && (
         <section className="mt-20 relative rounded-3xl overflow-hidden bg-zinc-900 text-white border border-zinc-700">
-          <div className="absolute inset-0 opacity-[0.15] bg-[radial-gradient(#8b5cf6_1px,transparent_1px)] [background-size:20px_20px]"></div>
+          <div className="absolute inset-0 opacity-[0.15] bg-[radial-gradient(#8b5cf6_1px,transparent_1px)] bg-size-[20px_20px]"></div>
           <div className="absolute top-0 right-0 w-80 h-80 bg-violet-600/15 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4"></div>
           <div className="absolute bottom-0 left-0 w-60 h-60 bg-fuchsia-600/15 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4"></div>
 
@@ -764,7 +772,7 @@ function App() {
               <div className="inline-flex items-center justify-center p-3 bg-violet-500/10 rounded-2xl mb-6 ring-1 ring-violet-500/50 backdrop-blur-sm">
                 <ShieldCheckIcon className="w-8 h-8 text-violet-400" />
               </div>
-              <h2 className="text-3xl md:text-5xl font-heading font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-br from-white via-zinc-200 to-zinc-400 tracking-tight">
+              <h2 className="text-3xl md:text-5xl font-heading font-bold mb-6 bg-clip-text text-transparent bg-linear-to-br from-white via-zinc-200 to-zinc-400 tracking-tight">
                 Privacy is core product infrastructure, not a secondary feature.
               </h2>
               <p className="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed">
