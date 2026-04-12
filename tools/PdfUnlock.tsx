@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
 import { Dropzone } from '../components/Dropzone';
 import { useNotification } from '../components/NotificationContext';
+import { ToolActions, ToolFileMeta, ToolHeader, ToolStatusNotice } from '../components/tooling';
+import {
+  buildPdfDownloadName,
+  isPdfFile,
+  mapPdfError,
+  triggerBlobDownload,
+  useToolProcessState,
+  validatePdfFile,
+} from '../utils/pdf';
 
 declare global {
   interface Window {
@@ -12,16 +21,37 @@ declare global {
 export const PdfUnlock: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [password, setPassword] = useState('');
-  const [isProcessing, setIsProcessing] = useState(false);
+  const processState = useToolProcessState();
   const { notify } = useNotification();
 
-  const unlock = async () => {
-    if (!file || !password) {
-      notify('Please provide the current PDF password', 'error');
+  const onFileSelect = (selectedFile: File) => {
+    const validation = validatePdfFile(selectedFile);
+    if (!validation.valid || !isPdfFile(selectedFile)) {
+      const message = validation.errorMessage || 'Please select a valid PDF file.';
+      processState.setError(message);
+      notify(message, 'error');
       return;
     }
 
-    setIsProcessing(true);
+    setFile(selectedFile);
+    processState.setReady('Protected PDF loaded. Enter current password.');
+  };
+
+  const resetTool = () => {
+    setFile(null);
+    setPassword('');
+    processState.setIdle('');
+  };
+
+  const unlock = async () => {
+    if (!file || !password) {
+      const message = 'Please provide the current PDF password.';
+      processState.setError(message);
+      notify(message, 'error');
+      return;
+    }
+
+    processState.setProcessing('Unlocking PDF...');
     try {
       const buffer = await file.arrayBuffer();
       const loadingTask = window.pdfjsLib.getDocument({ data: buffer, password });
@@ -46,28 +76,30 @@ export const PdfUnlock: React.FC = () => {
         doc.addImage(canvas.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, baseViewport.width, baseViewport.height);
       }
 
-      doc.save(`${file.name.replace(/\.pdf$/i, '')}-unlocked.pdf`);
+      const pdfBuffer = doc.output('arraybuffer');
+      const blob = new Blob([pdfBuffer], { type: 'application/pdf' });
+      triggerBlobDownload(blob, buildPdfDownloadName(file.name, 'unlocked'));
+      processState.setDone('Unlock complete and PDF downloaded.');
       notify('Unlocked PDF downloaded', 'success');
     } catch (error) {
-      console.error(error);
-      notify('Failed to unlock PDF. Check password and file.', 'error');
-    } finally {
-      setIsProcessing(false);
+      const mapped = mapPdfError(error);
+      processState.setError(mapped.userMessage);
+      notify(mapped.userMessage, 'error');
     }
   };
 
   return (
     <div className="max-w-4xl mx-auto py-8 px-4">
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-slate-900 dark:text-white">Unlock PDF</h2>
-        <p className="text-slate-500 dark:text-slate-400 mt-2">Remove password protection when you know the password.</p>
-      </div>
+      <ToolHeader title="Unlock PDF" subtitle="Remove password protection when you know the password." />
 
       {!file ? (
-        <Dropzone onFileSelect={setFile} accept="application/pdf" label="Upload protected PDF" />
+        <>
+          <Dropzone onFileSelect={onFileSelect} accept="application/pdf" label="Upload protected PDF" />
+          <ToolStatusNotice state={processState.state} message={processState.message} />
+        </>
       ) : (
         <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-6">
-          <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">{file.name}</p>
+          <ToolFileMeta fileName={file.name} />
           <label className="block text-sm font-semibold mb-2 text-slate-700 dark:text-slate-300">Current password</label>
           <input
             type="password"
@@ -78,12 +110,16 @@ export const PdfUnlock: React.FC = () => {
           />
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">This tool exports an unlocked copy for easier sharing.</p>
 
-          <div className="mt-6 flex justify-end gap-3">
-            <button onClick={() => setFile(null)} className="px-4 py-2 text-sm rounded-xl border border-slate-300 dark:border-slate-600">Cancel</button>
-            <button onClick={unlock} disabled={isProcessing || !password} className="px-5 py-2 text-sm font-semibold rounded-xl bg-blue-600 text-white disabled:opacity-50">
-              {isProcessing ? 'Unlocking...' : 'Unlock and Download'}
-            </button>
-          </div>
+          <ToolStatusNotice state={processState.state} message={processState.message} />
+
+          <ToolActions
+            onCancel={resetTool}
+            onPrimary={unlock}
+            primaryLabel="Unlock and Download"
+            processingLabel="Unlocking..."
+            isProcessing={processState.isProcessing}
+            disablePrimary={!password}
+          />
         </div>
       )}
     </div>

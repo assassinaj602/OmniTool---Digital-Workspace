@@ -1,15 +1,35 @@
 import React, { useState } from 'react';
 import { PDFDocument } from 'pdf-lib';
 import { useNotification } from '../components/NotificationContext';
+import { ToolActions, ToolHeader, ToolStatusNotice } from '../components/tooling';
+import {
+  buildPdfDownloadName,
+  downloadPdfBytes,
+  isPdfFile,
+  mapPdfError,
+  useToolProcessState,
+} from '../utils/pdf';
 
 export const PdfMerge: React.FC = () => {
   const [files, setFiles] = useState<File[]>([]);
-  const [isProcessing, setIsProcessing] = useState(false);
+  const processState = useToolProcessState();
   const { notify } = useNotification();
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFiles = Array.from(event.target.files || []).filter((file) => file.type === 'application/pdf');
+    const allFiles = Array.from(event.target.files || []);
+    const selectedFiles = allFiles.filter((file) => isPdfFile(file));
+    const skipped = allFiles.length - selectedFiles.length;
+
+    if (skipped > 0) {
+      notify(`${skipped} non-PDF file(s) were skipped.`, 'error');
+    }
+
     setFiles(selectedFiles);
+    if (selectedFiles.length >= 2) {
+      processState.setReady(`${selectedFiles.length} files ready to merge.`);
+    } else {
+      processState.setIdle('Select at least 2 PDF files.');
+    }
   };
 
   const move = (index: number, direction: 'up' | 'down') => {
@@ -25,10 +45,11 @@ export const PdfMerge: React.FC = () => {
   const merge = async () => {
     if (files.length < 2) {
       notify('Please select at least 2 PDF files', 'error');
+      processState.setError('Please select at least 2 PDF files.');
       return;
     }
 
-    setIsProcessing(true);
+    processState.setProcessing('Merging selected PDF files...');
     try {
       const merged = await PDFDocument.create();
 
@@ -40,27 +61,26 @@ export const PdfMerge: React.FC = () => {
       }
 
       const output = await merged.save();
-      const blob = new Blob([new Uint8Array(output)], { type: 'application/pdf' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = 'merged.pdf';
-      link.click();
-      URL.revokeObjectURL(link.href);
+      const fileName = buildPdfDownloadName(files[0]?.name || 'document.pdf', 'merged');
+      downloadPdfBytes(output, fileName);
+      processState.setDone('Merge complete and PDF downloaded.');
       notify('Merged PDF downloaded', 'success');
     } catch (error) {
       console.error(error);
-      notify('Failed to merge PDF files', 'error');
-    } finally {
-      setIsProcessing(false);
+      const mapped = mapPdfError(error);
+      processState.setError(mapped.userMessage);
+      notify(mapped.userMessage, 'error');
     }
+  };
+
+  const resetTool = () => {
+    setFiles([]);
+    processState.setIdle('');
   };
 
   return (
     <div className="max-w-4xl mx-auto py-8 px-4">
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-slate-900 dark:text-white">Merge PDF</h2>
-        <p className="text-slate-500 dark:text-slate-400 mt-2">Combine multiple PDFs in your preferred order.</p>
-      </div>
+      <ToolHeader title="Merge PDF" subtitle="Combine multiple PDFs in your preferred order." />
 
       <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-6">
         <label className="block w-full cursor-pointer border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-2xl p-8 text-center hover:border-blue-500 transition-colors">
@@ -68,6 +88,8 @@ export const PdfMerge: React.FC = () => {
           <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Select PDF files</span>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">You can choose multiple files at once.</p>
         </label>
+
+        <ToolStatusNotice state={processState.state} message={processState.message} />
 
         {files.length > 0 && (
           <div className="mt-6 space-y-2">
@@ -83,12 +105,15 @@ export const PdfMerge: React.FC = () => {
           </div>
         )}
 
-        <div className="mt-6 flex justify-end gap-3">
-          <button onClick={() => setFiles([])} className="px-4 py-2 text-sm rounded-xl border border-slate-300 dark:border-slate-600">Clear</button>
-          <button onClick={merge} disabled={isProcessing || files.length < 2} className="px-5 py-2 text-sm font-semibold rounded-xl bg-blue-600 text-white disabled:opacity-50">
-            {isProcessing ? 'Merging...' : 'Merge and Download'}
-          </button>
-        </div>
+        <ToolActions
+          onCancel={resetTool}
+          onPrimary={merge}
+          cancelLabel="Clear"
+          primaryLabel="Merge and Download"
+          processingLabel="Merging..."
+          isProcessing={processState.isProcessing}
+          disablePrimary={files.length < 2}
+        />
       </div>
     </div>
   );

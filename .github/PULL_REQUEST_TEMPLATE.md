@@ -14,6 +14,10 @@ Closes #
 - [ ] I have verified that this change works on Mobile sizes.
 - [ ] I have commented my code, particularly in hard-to-understand areas.
 - [ ] My changes generate no new warnings.
+- [ ] I ran `npm run build` successfully.
+- [ ] I ran `npm run test:coverage` successfully.
+- [ ] I ran `npm run perf:check` successfully.
+- [ ] I smoke-tested the top 10 tools before requesting review.
 
 ## 🧪 How Has This Been Tested?
 <!-- Please describe the tests that you ran to verify your changes. -->
