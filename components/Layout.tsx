@@ -1,36 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 interface LayoutProps {
   children: React.ReactNode;
   onNavigateHome: () => void;
+  onNavigateCategory: (category: string) => void;
+  isDark: boolean;
+  onToggleTheme: () => void;
   currentToolTitle?: string;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ children, onNavigateHome, currentToolTitle }) => {
-  const [isDark, setIsDark] = useState(false);
-
-  useEffect(() => {
-    // Check system preference or localStorage
-    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      setIsDark(true);
-      document.documentElement.classList.add('dark');
-    } else {
-      setIsDark(false);
-      document.documentElement.classList.remove('dark');
-    }
-  }, []);
-
-  const toggleTheme = () => {
-    if (isDark) {
-      document.documentElement.classList.remove('dark');
-      localStorage.theme = 'light';
-      setIsDark(false);
-    } else {
-      document.documentElement.classList.add('dark');
-      localStorage.theme = 'dark';
-      setIsDark(true);
-    }
-  };
+export const Layout: React.FC<LayoutProps> = ({ children, onNavigateHome, onNavigateCategory, isDark, onToggleTheme, currentToolTitle }) => {
 
   return (
     <div className="min-h-screen flex flex-col text-zinc-900 dark:text-zinc-100 transition-colors duration-300 relative bg-zinc-50 dark:bg-zinc-950">
@@ -65,13 +44,18 @@ export const Layout: React.FC<LayoutProps> = ({ children, onNavigateHome, curren
             </div>
             
             <div className="flex items-center space-x-3">
+              <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-emerald-50 dark:bg-emerald-950/40 rounded-lg border border-emerald-200 dark:border-emerald-900 text-emerald-700 dark:text-emerald-300">
+                <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span className="text-xs font-semibold">Client-side only</span>
+              </div>
+
               {/* Tools count badge */}
               <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-zinc-50 dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800">
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">20+ Tools</span>
               </div>
               
               <button 
-                onClick={toggleTheme}
+                onClick={onToggleTheme}
                 className="p-2 text-zinc-500 dark:text-zinc-400 hover:text-violet-600 dark:hover:text-violet-400 hover:bg-zinc-50 dark:hover:bg-zinc-900 rounded-lg transition-all duration-300 border border-transparent hover:border-zinc-200 dark:hover:border-zinc-800"
                 aria-label="Toggle Dark Mode"
               >
@@ -142,10 +126,10 @@ export const Layout: React.FC<LayoutProps> = ({ children, onNavigateHome, curren
                 Tools
               </h4>
               <ul className="space-y-2 text-zinc-500 dark:text-zinc-400">
-                <li><button onClick={onNavigateHome} className="hover:text-violet-600 dark:hover:text-violet-400 transition-colors">Image Tools</button></li>
-                <li><button onClick={onNavigateHome} className="hover:text-violet-600 dark:hover:text-violet-400 transition-colors">PDF Tools</button></li>
-                <li><button onClick={onNavigateHome} className="hover:text-violet-600 dark:hover:text-violet-400 transition-colors">Converters</button></li>
-                <li><button onClick={onNavigateHome} className="hover:text-violet-600 dark:hover:text-violet-400 transition-colors">File Tools</button></li>
+                <li><button onClick={() => onNavigateCategory('All Tools')} className="hover:text-violet-600 dark:hover:text-violet-400 transition-colors">All Tools</button></li>
+                <li><button onClick={() => onNavigateCategory('Image Tools')} className="hover:text-violet-600 dark:hover:text-violet-400 transition-colors">Image Tools</button></li>
+                <li><button onClick={() => onNavigateCategory('PDF Tools')} className="hover:text-violet-600 dark:hover:text-violet-400 transition-colors">PDF Tools</button></li>
+                <li><button onClick={() => onNavigateCategory('Conversion')} className="hover:text-violet-600 dark:hover:text-violet-400 transition-colors">Converters</button></li>
               </ul>
             </div>
             

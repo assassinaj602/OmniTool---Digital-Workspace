@@ -1,14 +1,36 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { UploadIcon } from './Icons';
 
 interface DropzoneProps {
   onFileSelect: (file: File) => void;
   accept: string;
   label?: string;
+  enablePaste?: boolean;
 }
 
-export const Dropzone: React.FC<DropzoneProps> = ({ onFileSelect, accept, label = "Drop your file here, or browse" }) => {
+export const Dropzone: React.FC<DropzoneProps> = ({
+  onFileSelect,
+  accept,
+  label = 'Drop your file here, or browse',
+  enablePaste = true,
+}) => {
   const [isDragging, setIsDragging] = useState(false);
+  const [isActive, setIsActive] = useState(false);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (!enablePaste || !isActive) return;
+
+    const handlePaste = (event: ClipboardEvent) => {
+      const files = event.clipboardData?.files;
+      if (!files?.length) return;
+
+      onFileSelect(files[0]);
+    };
+
+    window.addEventListener('paste', handlePaste);
+    return () => window.removeEventListener('paste', handlePaste);
+  }, [enablePaste, isActive, onFileSelect]);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -39,6 +61,8 @@ export const Dropzone: React.FC<DropzoneProps> = ({ onFileSelect, accept, label 
 
   return (
     <div 
+      role="button"
+      tabIndex={0}
       className={`
         relative w-full max-w-2xl mx-auto h-72 border-2 border-dashed rounded-3xl flex flex-col items-center justify-center cursor-pointer transition-all duration-300 group overflow-hidden
         ${isDragging 
@@ -48,11 +72,21 @@ export const Dropzone: React.FC<DropzoneProps> = ({ onFileSelect, accept, label 
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      onClick={() => document.getElementById('file-upload')?.click()}
+      onFocus={() => setIsActive(true)}
+      onBlur={() => setIsActive(false)}
+      onMouseEnter={() => setIsActive(true)}
+      onMouseLeave={() => setIsActive(false)}
+      onClick={() => inputRef.current?.click()}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          inputRef.current?.click();
+        }
+      }}
     >
       <input 
+        ref={inputRef}
         type="file" 
-        id="file-upload" 
         className="hidden" 
         accept={accept} 
         onChange={handleFileInput} 
@@ -75,6 +109,11 @@ export const Dropzone: React.FC<DropzoneProps> = ({ onFileSelect, accept, label 
       <p className="relative z-10 text-sm text-slate-500 dark:text-slate-400">
         Supports <span className="font-mono bg-slate-100 dark:bg-slate-700 px-1 py-0.5 rounded text-slate-700 dark:text-slate-300">{prettyAccept}</span>
       </p>
+      {enablePaste && (
+        <p className="relative z-10 text-xs text-slate-500 dark:text-slate-400 mt-1">
+          Tip: press Ctrl+V to paste a copied file.
+        </p>
+      )}
       
       <div className="mt-6 relative z-10">
           <span className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl shadow-md transition-all group-hover:shadow-lg hover:-translate-y-0.5">

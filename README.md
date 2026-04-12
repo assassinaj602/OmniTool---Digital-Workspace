@@ -1,103 +1,103 @@
-# OmniTool - Privacy-First Digital Workspace 🛡️
+# OmniTool
+
+Privacy-first digital workspace for file processing in the browser.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![React](https://img.shields.io/badge/react-v19.0.0-61dafb.svg)
-![PWA](https://img.shields.io/badge/PWA-Ready-purple.svg)
-![Privacy](https://img.shields.io/badge/privacy-100%25%20Client--Side-green.svg)
-![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
+![PWA](https://img.shields.io/badge/PWA-ready-6b7280.svg)
+![Privacy](https://img.shields.io/badge/privacy-client--side-green.svg)
 
-> **The all-in-one digital workspace that runs entirely in your browser.**  
-> No uploads. No servers. No waiting. Just instant, secure file processing.
+## Product Overview
 
-## 🌟 Why OmniTool?
+OmniTool is a browser-native workspace for image and document workflows. It is designed to feel like a production SaaS interface without requiring backend infrastructure.
 
-Most online tools upload your sensitive documents to a remote server to process them. **OmniTool is different.**
+Core principles:
+- Client-side processing only
+- No server uploads
+- Fast, low-friction workflows
+- Command-driven navigation
+- Dark and light mode support
 
-By leveraging **WebAssembly** and modern browser APIs, OmniTool processes files directly on your device. This means:
-1.  **🔒 Zero Privacy Risk:** Your files never leave your computer.
-2.  **⚡ Instant Speed:** No upload or download latency.
-3.  **📡 Offline Capable:** Works perfectly without an internet connection (PWA).
+## Current Capabilities
 
-## 🚀 Features
+### Image workflows
+- Resize and bulk resize
+- Compress and convert formats
+- Crop, rotate, and flip
+- Background removal
+- Collage builder
+- Meme editor
+- Color extraction
+- Image upscaling
 
-### 🖼️ Image Tools
-*   **Resizer:** Pixel-perfect scaling with preset aspects (Instagram, LinkedIn, HD).
-*   **Compressor:** Reduce file size (WebP/JPEG) without visible quality loss.
-*   **Cropper:** Interactive cropping with rule-of-thirds grid.
-*   **Converter:** Universal format swapper (JPG ↔ PNG ↔ WebP).
-*   **Collage Maker:** Drag-and-drop grid and layout creator.
-*   **Enlarger:** Client-side upscaling.
-*   **Rotate/Flip:** Orientation fixes.
-*   **Color Picker:** Extract HEX/RGB from any pixel.
+### Document workflows
+- Image to PDF
+- JPG to PDF
+- PNG to PDF
+- PDF compression
+- PDF to image
+- PDF to GIF
+- PDF text and document conversion
 
-### 📄 PDF Tools
-*   **Image to PDF:** Combine photos into professional documents.
-*   **Compress PDF:** Optimize vector PDFs for email/web.
-*   **PDF to Image:** Extract pages as high-res PNG/JPG.
-*   **PDF to GIF:** Turn slides into animated loops.
-*   **Converter:** Extract text and export to Word (.doc).
+### Conversion workflows
+- HEIC to JPG
+- PNG to SVG
+- SVG conversion modes
+- WebP to JPG
+- PNG to JPG
+- JPG to PNG
 
-### 🛠️ Advanced Utilities
-*   **Vectorization:** Convert Raster images (PNG/JPG) to SVG vectors.
-*   **HEIC Support:** Native conversion for Apple image formats.
-*   **Bulk Processing:** Resize multiple images at once (ZIP export).
+## UX and Product Layer
 
-## 💻 Tech Stack
+The app includes a product-oriented shell instead of a flat tool list:
+- Command palette with command-style actions and navigation
+- Pinned tools and recent tools
+- Category filters and searchable tool discovery
+- Unified premium tool workspace shell
+- Drag, browse, and paste upload pathways
 
-*   **Frontend:** React 19, TypeScript
-*   **Styling:** Tailwind CSS, Framer Motion
-*   **Typography:** Space Grotesk (Headings), Inter (UI), JetBrains Mono (Data)
-*   **Core Libraries:**
-    *   `pdf.js` / `jspdf` (Document manipulation)
-    *   `imagetracerjs` (Vectorization)
-    *   `heic2any` (HEIC decoding)
-    *   `jszip` (Archive generation)
+## Tech Stack
 
-## ⚡ Getting Started
+- React 19
+- TypeScript
+- Tailwind CSS
+- Framer Motion
+- Vite
+
+## Local Development
 
 ### Prerequisites
-*   Node.js (v18+)
-*   npm or yarn
+- Node.js 18+
+- npm
 
-### Installation
+### Install
 
-1.  **Clone the repository**
-    ```bash
-    git clone https://github.com/yourusername/omnitool.git
-    cd omnitool
-    ```
+```bash
+npm install
+```
 
-2.  **Install dependencies**
-    ```bash
-    npm install
-    ```
+### Run
 
-3.  **Start the development server**
-    ```bash
-    npm run start
-    ```
+```bash
+npm run dev
+```
 
-4.  **Build for production**
-    ```bash
-    npm run build
-    ```
+### Build
 
-## 🤝 Contributing
+```bash
+npm run build
+```
 
-We love contributions! Whether it's a bug fix, a new tool, or a documentation improvement, your help is welcome.
+## Deployment
 
-Please read our [Contributing Guide](CONTRIBUTING.md) to get started.
+This project is configured for Vercel:
+- Build command: `npm run build`
+- Output directory: `dist`
 
-## 🛡️ Privacy Policy
+## Privacy Model
 
-OmniTool is a **static web application**. It does not have a backend database. It does not use analytics cookies. All processing is performed using the client's hardware.
+OmniTool is a static web app without a server-side processing layer. Files are handled in-browser by the client runtime.
 
-## 📄 License
+## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-<div align="center">
-  <sub>Built with ❤️ by the Open Source Community.</sub>
-</div>
+MIT License
