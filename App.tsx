@@ -636,7 +636,7 @@ function App() {
           Browser-native productivity platform
         </div>
 
-        <h2 className="text-5xl md:text-7xl font-heading font-black text-zinc-900 dark:text-white tracking-tight mb-6 leading-[1.05] max-w-5xl mx-auto">
+        <h2 className="text-3xl sm:text-4xl md:text-7xl font-heading font-black text-zinc-900 dark:text-white tracking-tight mb-6 leading-[1.05] max-w-5xl mx-auto">
           Professional file workflows,
           <span className="block mt-2 bg-linear-to-r from-violet-600 to-fuchsia-500 bg-clip-text text-transparent">zero uploads, zero friction.</span>
         </h2>
