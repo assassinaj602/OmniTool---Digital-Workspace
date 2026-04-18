@@ -72,10 +72,12 @@ const PdfPageNumbers = React.lazy(() => import('./tools/PdfPageNumbers').then((m
 
 const setThemeClass = (dark: boolean) => {
   if (dark) {
+    document.documentElement.classList.remove('light');
     document.documentElement.classList.add('dark');
     localStorage.theme = 'dark';
   } else {
     document.documentElement.classList.remove('dark');
+    document.documentElement.classList.add('light');
     localStorage.theme = 'light';
   }
 };

@@ -8,6 +8,19 @@
     <link rel="icon" href="/assets/icon.jpg" />
     <link rel="manifest" href="/manifest.json" />
     <meta name="theme-color" content="#2563eb" />
+
+    <script>
+      (function () {
+        const preferred = localStorage.getItem('theme');
+        const dark = preferred
+          ? preferred === 'dark'
+          : window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        const root = document.documentElement;
+        root.classList.remove('light', 'dark');
+        root.classList.add(dark ? 'dark' : 'light');
+      })();
+    </script>
     
     <!-- Fonts: Space Grotesk (Headings), Inter (UI), JetBrains Mono (Data) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
