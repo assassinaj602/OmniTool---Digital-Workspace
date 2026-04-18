@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
+import JSZip from 'jszip';
 import { useNotification } from '../components/NotificationContext';
-
-declare global {
-  interface Window {
-    JSZip: any;
-  }
-}
 
 export const ZipCreator: React.FC = () => {
   const [files, setFiles] = useState<File[]>([]);
@@ -25,15 +20,16 @@ export const ZipCreator: React.FC = () => {
 
     setIsProcessing(true);
     try {
-      const zip = new window.JSZip();
+      const zip = new JSZip();
       files.forEach((file) => zip.file(file.name, file));
 
       const output = await zip.generateAsync({ type: 'blob' });
       const link = document.createElement('a');
-      link.href = URL.createObjectURL(output);
+      const url = URL.createObjectURL(output);
+      link.href = url;
       link.download = 'archive.zip';
       link.click();
-      URL.revokeObjectURL(link.href);
+      setTimeout(() => URL.revokeObjectURL(url), 100);
       notify('ZIP archive downloaded', 'success');
     } catch (error) {
       console.error(error);

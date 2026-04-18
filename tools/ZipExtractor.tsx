@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
+import JSZip from 'jszip';
 import { useNotification } from '../components/NotificationContext';
-
-declare global {
-  interface Window {
-    JSZip: any;
-  }
-}
 
 interface ExtractedItem {
   name: string;
@@ -26,7 +21,7 @@ export const ZipExtractor: React.FC = () => {
     setFile(selected);
     setIsProcessing(true);
     try {
-      const zip = await window.JSZip.loadAsync(selected);
+      const zip = await JSZip.loadAsync(selected);
       const entries = Object.values(zip.files).filter((entry: any) => !entry.dir);
       const extracted: ExtractedItem[] = [];
 
@@ -49,21 +44,23 @@ export const ZipExtractor: React.FC = () => {
 
   const downloadOne = (item: ExtractedItem) => {
     const link = document.createElement('a');
-    link.href = URL.createObjectURL(item.blob);
+    const url = URL.createObjectURL(item.blob);
+    link.href = url;
     link.download = item.name.split('/').pop() || item.name;
     link.click();
-    URL.revokeObjectURL(link.href);
+    setTimeout(() => URL.revokeObjectURL(url), 100);
   };
 
   const downloadAll = async () => {
-    const pack = new window.JSZip();
+    const pack = new JSZip();
     items.forEach((item) => pack.file(item.name.split('/').pop() || item.name, item.blob));
     const out = await pack.generateAsync({ type: 'blob' });
     const link = document.createElement('a');
-    link.href = URL.createObjectURL(out);
+    const url = URL.createObjectURL(out);
+    link.href = url;
     link.download = `${file?.name.replace(/\.zip$/i, '') || 'extracted'}-files.zip`;
     link.click();
-    URL.revokeObjectURL(link.href);
+    setTimeout(() => URL.revokeObjectURL(url), 100);
   };
 
   return (

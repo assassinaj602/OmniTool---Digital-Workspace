@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import JSZip from 'jszip';
 import { PDFDocument } from 'pdf-lib';
 import { Dropzone } from '../components/Dropzone';
 import { useNotification } from '../components/NotificationContext';
@@ -11,12 +12,6 @@ import {
   useToolProcessState,
   validatePdfFile,
 } from '../utils/pdf';
-
-declare global {
-  interface Window {
-    JSZip: any;
-  }
-}
 
 const parseRange = (input: string, totalPages: number) => {
   const pageSet = new Set<number>();
@@ -96,7 +91,7 @@ export const PdfSplit: React.FC = () => {
     try {
       const bytes = await file.arrayBuffer();
       const source = await PDFDocument.load(bytes);
-      const zip = new window.JSZip();
+      const zip = new JSZip();
       const base = file.name.replace(/\.pdf$/i, '');
 
       for (const pageIndex of pages) {

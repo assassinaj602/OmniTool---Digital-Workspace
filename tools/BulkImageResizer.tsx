@@ -1,13 +1,8 @@
 import React, { useState } from 'react';
+import JSZip from 'jszip';
 import { Dropzone } from '../components/Dropzone';
 import { DownloadIcon, BulkIcon } from '../components/Icons';
 import { useNotification } from '../components/NotificationContext';
-
-declare global {
-  interface Window {
-    JSZip: any;
-  }
-}
 
 export const BulkImageResizer: React.FC = () => {
   const [files, setFiles] = useState<File[]>([]);
@@ -25,11 +20,12 @@ export const BulkImageResizer: React.FC = () => {
     setIsProcessing(true);
 
     try {
-      const zip = new window.JSZip();
+      const zip = new JSZip();
       
       const processPromises = files.map(file => {
         return new Promise<void>((resolve) => {
           const img = new Image();
+          const url = URL.createObjectURL(file);
           img.onload = () => {
             const canvas = document.createElement('canvas');
             const ratio = img.width / img.height;
@@ -41,13 +37,19 @@ export const BulkImageResizer: React.FC = () => {
                 ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                 canvas.toBlob(blob => {
                    if (blob) zip.file(`resized-${file.name}`, blob);
+                   URL.revokeObjectURL(url);
                    resolve();
                 }, file.type, 0.9);
             } else {
+                URL.revokeObjectURL(url);
                 resolve();
             }
           };
-          img.src = URL.createObjectURL(file);
+          img.onerror = () => {
+            URL.revokeObjectURL(url);
+            resolve();
+          };
+          img.src = url;
         });
       });
 

@@ -2,12 +2,7 @@ import React, { useState } from 'react';
 import { Dropzone } from '../components/Dropzone';
 import { DownloadIcon, PdfIcon } from '../components/Icons';
 import { useNotification } from '../components/NotificationContext';
-
-declare global {
-  interface Window {
-    pdfjsLib: any;
-  }
-}
+import { pdfjsLib } from '../utils/pdf';
 
 interface TextRun {
     text: string;
@@ -50,7 +45,7 @@ export const PdfConverter: React.FC = () => {
 
     try {
         const buffer = await f.arrayBuffer();
-        const pdf = await window.pdfjsLib.getDocument(buffer).promise;
+        const pdf = await pdfjsLib.getDocument(buffer).promise;
         let fullText = '';
                 const layouts: PageLayout[] = [];
         
@@ -109,9 +104,11 @@ export const PdfConverter: React.FC = () => {
   const downloadText = () => {
       const blob = new Blob([extractedText], { type: 'text/plain' });
       const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
+      const url = URL.createObjectURL(blob);
+      link.href = url;
       link.download = `${file?.name.replace('.pdf', '')}.txt`;
       link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 100);
       notify('Text file downloaded', 'success');
   };
 
@@ -140,9 +137,11 @@ export const PdfConverter: React.FC = () => {
       
       const blob = new Blob(['\ufeff', sourceHTML], { type: 'application/msword' });
       const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
+    const url = URL.createObjectURL(blob);
+    link.href = url;
       link.download = `${file?.name.replace('.pdf', '')}.doc`;
       link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 100);
             notify('Word document downloaded (layout-preserving best effort)', 'success');
   };
 

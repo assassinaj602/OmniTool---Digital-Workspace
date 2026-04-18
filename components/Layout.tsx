@@ -25,7 +25,24 @@ interface LayoutProps {
 
 export const Layout: React.FC<LayoutProps> = ({ children, onNavigateHome, onNavigateCategory, onSelectTool, toolGroups, toolCount, selectedCategory, isDark, onToggleTheme, currentToolTitle }) => {
   const [hoveredCategory, setHoveredCategory] = React.useState<string | null>(null);
+  const [viewCount, setViewCount] = React.useState<number | null>(null);
   const hoveredGroup = toolGroups.find((group) => group.category === hoveredCategory) || null;
+
+  React.useEffect(() => {
+    const run = async () => {
+      try {
+        const res = await fetch('https://api.countapi.xyz/hit/omnitool-digital-workspace/visits');
+        const json = await res.json();
+        if (typeof json?.value === 'number') {
+          setViewCount(json.value);
+        }
+      } catch {
+        setViewCount(null);
+      }
+    };
+
+    run();
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col text-zinc-900 dark:text-zinc-100 transition-colors duration-300 relative bg-zinc-50 dark:bg-zinc-950">
@@ -252,7 +269,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, onNavigateHome, onNavi
                 <li><button onClick={() => onNavigateCategory('All Tools')} className="hover:text-violet-600 dark:hover:text-violet-400 transition-colors">All Tools</button></li>
                 <li><button onClick={() => onNavigateCategory('Image Tools')} className="hover:text-violet-600 dark:hover:text-violet-400 transition-colors">Image Tools</button></li>
                 <li><button onClick={() => onNavigateCategory('PDF Tools')} className="hover:text-violet-600 dark:hover:text-violet-400 transition-colors">PDF Tools</button></li>
-                <li><button onClick={() => onNavigateCategory('Archive')} className="hover:text-violet-600 dark:hover:text-violet-400 transition-colors">Archive</button></li>
+                <li><button onClick={() => onNavigateCategory('Archive Tools')} className="hover:text-violet-600 dark:hover:text-violet-400 transition-colors">Archive</button></li>
                 <li><button onClick={() => onNavigateCategory('Conversion')} className="hover:text-violet-600 dark:hover:text-violet-400 transition-colors">Converters</button></li>
               </ul>
             </div>
@@ -297,6 +314,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, onNavigateHome, onNavi
                   <svg className="w-4 h-4 mr-1 text-emerald-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                   100% Secure
                 </span>
+                <span className="text-xs">Views: {viewCount !== null ? viewCount.toLocaleString() : '...'} </span>
                 <span className="text-xs">Made with <span className="text-red-500">♥</span> for privacy-conscious users</span>
               </div>
             </div>

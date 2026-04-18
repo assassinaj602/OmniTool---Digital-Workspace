@@ -16,8 +16,18 @@ Core principles:
 - Client-side processing only
 - No server uploads
 - Fast, low-friction workflows
-- Command-driven navigation
+- Top-navigation tool discovery
 - Dark and light mode support
+- Accessible, keyboard-friendly interactions
+
+## Recent Updates
+
+- Fixed invalid nested interactive elements in tool cards for better accessibility.
+- Corrected archive category naming consistency across navigation and footer.
+- Added a global footer view counter.
+- Migrated runtime processing dependencies from CDN script tags to npm-bundled imports.
+- Added integration smoke tests for core PDF workflows.
+- Improved object URL cleanup across conversion/export tools to prevent memory leaks.
 
 ## Current Capabilities
 
@@ -41,6 +51,14 @@ Core principles:
 - PDF to image
 - PDF to GIF
 - PDF text and document conversion
+- PDF merge/split/rotate/watermark
+- PDF protect/unlock
+- PDF organize and page numbering
+
+### Archive workflows
+
+- ZIP create
+- ZIP extract
 
 ### Conversion workflows
 
@@ -55,11 +73,20 @@ Core principles:
 
 The app includes a product-oriented shell instead of a flat tool list:
 
-- Command palette with command-style actions and navigation
+- Category-first top navigation with hover tool discovery
 - Pinned tools and recent tools
 - Category filters and searchable tool discovery
 - Unified premium tool workspace shell
 - Drag, browse, and paste upload pathways
+- Footer quick navigation and live view count
+
+## Runtime and Performance Notes
+
+OmniTool now uses bundled npm dependencies for processing libraries (for example `pdfjs-dist`, `jspdf`, `jszip`, `heic2any`, `gif.js`, `imagetracerjs`) instead of runtime CDN globals. This keeps behavior consistent with the privacy/offline model and avoids third-party script dependency at runtime.
+
+To keep initial load fast, heavy tools are lazy-loaded. The HEIC conversion path uses a large decoder bundle that is only fetched when the HEIC tool is opened.
+
+Bundle budget enforcement is strict by default (`500KB` per JS asset), with a targeted override for the lazily loaded HEIC tool chunk.
 
 ## Tech Stack
 
@@ -94,12 +121,20 @@ npm run dev
 npm run build
 ```
 
+### Test and Quality Gates
+
+```bash
+npm run test:coverage
+npm run perf:check
+```
+
 ## Deployment
 
 This project is configured for Vercel:
 
 - Build command: `npm run build`
 - Output directory: `dist`
+- GitHub push to the deployment branch should trigger Vercel deployments when the repo is linked.
 
 ## Privacy Model
 

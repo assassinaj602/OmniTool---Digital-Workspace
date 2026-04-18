@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
+import { jsPDF } from 'jspdf';
 import { Dropzone } from '../components/Dropzone';
 import { DownloadIcon, CompressIcon } from '../components/Icons';
 import { useNotification } from '../components/NotificationContext';
-
-declare global {
-  interface Window {
-    pdfjsLib: any;
-    jspdf: any;
-  }
-}
+import { pdfjsLib } from '../utils/pdf';
 
 export const PdfCompressor: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -23,10 +18,9 @@ export const PdfCompressor: React.FC = () => {
     
     try {
         const buffer = await file.arrayBuffer();
-        const loadingTask = window.pdfjsLib.getDocument(buffer);
+        const loadingTask = pdfjsLib.getDocument(buffer);
         const pdf = await loadingTask.promise;
-        
-        const { jsPDF } = window.jspdf;
+
         const newDoc = new jsPDF();
         newDoc.deletePage(1); 
         

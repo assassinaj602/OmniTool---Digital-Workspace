@@ -1,13 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import heic2any from 'heic2any';
 import { Dropzone } from '../components/Dropzone';
 import { DownloadIcon } from '../components/Icons';
 import { useNotification } from '../components/NotificationContext';
-
-declare global {
-  interface Window {
-    heic2any: any;
-  }
-}
 
 export const HeicToJpg: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -15,12 +10,18 @@ export const HeicToJpg: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const { notify } = useNotification();
 
+  useEffect(() => {
+    return () => {
+      if (convertedUrl) URL.revokeObjectURL(convertedUrl);
+    };
+  }, [convertedUrl]);
+
   const processFile = async (f: File) => {
     setFile(f);
     setIsProcessing(true);
     notify('Converting HEIC file...', 'info');
     try {
-        const resultBlob = await window.heic2any({
+        const resultBlob = await heic2any({
             blob: f,
             toType: "image/jpeg",
             quality: 0.9
@@ -28,7 +29,8 @@ export const HeicToJpg: React.FC = () => {
         
         // heic2any can return Blob or Blob[]
         const blob = Array.isArray(resultBlob) ? resultBlob[0] : resultBlob;
-        setConvertedUrl(URL.createObjectURL(blob));
+        if (convertedUrl) URL.revokeObjectURL(convertedUrl);
+        setConvertedUrl(URL.createObjectURL(blob as Blob));
         notify('Conversion successful!', 'success');
     } catch (e) {
         console.error(e);
@@ -65,7 +67,7 @@ export const HeicToJpg: React.FC = () => {
                      <DownloadIcon className="w-5 h-5 mr-2" />
                      Download JPG
                    </a>
-                   <button onClick={() => { setFile(null); setConvertedUrl(''); }} className="mt-4 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">
+                   <button onClick={() => { if (convertedUrl) URL.revokeObjectURL(convertedUrl); setFile(null); setConvertedUrl(''); }} className="mt-4 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">
                      Convert Another
                    </button>
                 </>

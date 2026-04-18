@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { jsPDF } from 'jspdf';
 import { Dropzone } from '../components/Dropzone';
 import { useNotification } from '../components/NotificationContext';
 import { ToolActions, ToolFileMeta, ToolHeader, ToolStatusNotice } from '../components/tooling';
@@ -6,17 +7,11 @@ import {
   buildPdfDownloadName,
   isPdfFile,
   mapPdfError,
+  pdfjsLib,
   triggerBlobDownload,
   useToolProcessState,
   validatePdfFile,
 } from '../utils/pdf';
-
-declare global {
-  interface Window {
-    pdfjsLib: any;
-    jspdf: any;
-  }
-}
 
 export const PdfProtect: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -54,10 +49,9 @@ export const PdfProtect: React.FC = () => {
     processState.setProcessing('Applying password protection...');
     try {
       const buffer = await file.arrayBuffer();
-      const loadingTask = window.pdfjsLib.getDocument(buffer);
+      const loadingTask = pdfjsLib.getDocument(buffer);
       const pdf = await loadingTask.promise;
 
-      const { jsPDF } = window.jspdf;
       const doc = new jsPDF({
         encryption: {
           userPassword: password,

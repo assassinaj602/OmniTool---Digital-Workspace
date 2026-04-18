@@ -5,23 +5,13 @@ import { ToolWorkspaceShell } from './components/ToolWorkspaceShell';
 import { ImageResizer } from './tools/ImageResizer';
 import { ImageConverter } from './tools/ImageConverter';
 import { MemeGenerator } from './tools/MemeGenerator';
-import { ImageToPdf } from './tools/ImageToPdf';
 import { ImageCropper } from './tools/ImageCropper';
 import { ImageCompressor } from './tools/ImageCompressor';
 import { RotateFlip } from './tools/RotateFlip';
-import { PdfToImage } from './tools/PdfToImage';
 import { CollageMaker } from './tools/CollageMaker';
 import { ColorPicker } from './tools/ColorPicker';
-import { BulkImageResizer } from './tools/BulkImageResizer';
-import { HeicToJpg } from './tools/HeicToJpg';
-import { SvgTools } from './tools/SvgTools';
-import { PdfCompressor } from './tools/PdfCompressor';
-import { PdfToGif } from './tools/PdfToGif';
 import { ImageEnlarger } from './tools/ImageEnlarger';
-import { PdfConverter } from './tools/PdfConverter';
 import { BackgroundRemover } from './tools/BackgroundRemover';
-import { ZipExtractor } from './tools/ZipExtractor';
-import { ZipCreator } from './tools/ZipCreator';
 import { ToolCategory, ToolDef } from './types';
 import {
   ResizeIcon, ConvertIcon, LaughIcon, PdfIcon,
@@ -69,6 +59,16 @@ const PdfProtect = React.lazy(() => import('./tools/PdfProtect').then((module) =
 const PdfUnlock = React.lazy(() => import('./tools/PdfUnlock').then((module) => ({ default: module.PdfUnlock })));
 const PdfOrganize = React.lazy(() => import('./tools/PdfOrganize').then((module) => ({ default: module.PdfOrganize })));
 const PdfPageNumbers = React.lazy(() => import('./tools/PdfPageNumbers').then((module) => ({ default: module.PdfPageNumbers })));
+const PdfToImage = React.lazy(() => import('./tools/PdfToImage').then((module) => ({ default: module.PdfToImage })));
+const PdfCompressor = React.lazy(() => import('./tools/PdfCompressor').then((module) => ({ default: module.PdfCompressor })));
+const PdfConverter = React.lazy(() => import('./tools/PdfConverter').then((module) => ({ default: module.PdfConverter })));
+const PdfToGif = React.lazy(() => import('./tools/PdfToGif').then((module) => ({ default: module.PdfToGif })));
+const ImageToPdf = React.lazy(() => import('./tools/ImageToPdf').then((module) => ({ default: module.ImageToPdf })));
+const BulkImageResizer = React.lazy(() => import('./tools/BulkImageResizer').then((module) => ({ default: module.BulkImageResizer })));
+const HeicToJpg = React.lazy(() => import('./tools/HeicToJpg').then((module) => ({ default: module.HeicToJpg })));
+const SvgTools = React.lazy(() => import('./tools/SvgTools').then((module) => ({ default: module.SvgTools })));
+const ZipExtractor = React.lazy(() => import('./tools/ZipExtractor').then((module) => ({ default: module.ZipExtractor })));
+const ZipCreator = React.lazy(() => import('./tools/ZipCreator').then((module) => ({ default: module.ZipCreator })));
 
 const setThemeClass = (dark: boolean) => {
   if (dark) {
@@ -785,10 +785,17 @@ function App() {
                 const isFavorite = favoriteToolIds.includes(tool.id);
 
                 return (
-                  <button
-                    type="button"
+                  <div
+                    role="button"
+                    tabIndex={0}
                     key={tool.id}
                     onClick={() => openTool(tool.id)}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        openTool(tool.id);
+                      }
+                    }}
                     className="group bg-white dark:bg-zinc-800 rounded-2xl p-5 border border-zinc-200 dark:border-zinc-700 hover:border-violet-300 dark:hover:border-violet-600 hover:shadow-lg hover:shadow-violet-500/5 transition-all duration-200 cursor-pointer hover:-translate-y-0.5 h-full flex flex-col relative overflow-hidden text-left"
                   >
                     <div className="absolute top-0 left-0 w-full h-0.5 bg-linear-to-r from-violet-500 to-fuchsia-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
@@ -817,7 +824,7 @@ function App() {
                       {tool.title}
                     </h3>
                     <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">{tool.description}</p>
-                  </button>
+                  </div>
                 );
               })}
             </div>

@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import JSZip from 'jszip';
 import { Dropzone } from '../components/Dropzone';
 import { DownloadIcon, PdfImageIcon } from '../components/Icons';
 import { useNotification } from '../components/NotificationContext';
-
-declare global {
-  interface Window {
-    pdfjsLib: any;
-    JSZip: any;
-  }
-}
+import { pdfjsLib } from '../utils/pdf';
 
 interface PdfToImageProps {
   defaultOutputFormat?: 'png' | 'jpeg';
@@ -39,7 +34,7 @@ export const PdfToImage: React.FC<PdfToImageProps> = ({ defaultOutputFormat = 'p
     setIsProcessing(true);
     try {
       const buffer = await file.arrayBuffer();
-      const loadingTask = window.pdfjsLib.getDocument(buffer);
+      const loadingTask = pdfjsLib.getDocument(buffer);
       const pdf = await loadingTask.promise;
       setPdfDoc(pdf);
       notify(`Loaded PDF with ${pdf.numPages} pages`, 'success');
@@ -104,7 +99,7 @@ export const PdfToImage: React.FC<PdfToImageProps> = ({ defaultOutputFormat = 'p
       if (pageImages.length === 0) return;
       setIsZipping(true);
       try {
-          const zip = new window.JSZip();
+          const zip = new JSZip();
           const folder = zip.folder("pages");
           
           pageImages.forEach((dataUrl, i) => {
@@ -114,9 +109,11 @@ export const PdfToImage: React.FC<PdfToImageProps> = ({ defaultOutputFormat = 'p
           
           const content = await zip.generateAsync({ type: "blob" });
           const link = document.createElement('a');
-          link.href = URL.createObjectURL(content);
+          const url = URL.createObjectURL(content);
+          link.href = url;
           link.download = `${file?.name.replace('.pdf', '')}-pages.zip`;
           link.click();
+          setTimeout(() => URL.revokeObjectURL(url), 100);
           notify('ZIP file downloaded', 'success');
       } catch (e) {
           console.error(e);

@@ -1,13 +1,8 @@
 import React, { useState } from 'react';
+import ImageTracer from 'imagetracerjs';
 import { Dropzone } from '../components/Dropzone';
 import { DownloadIcon, SvgIcon } from '../components/Icons';
 import { useNotification } from '../components/NotificationContext';
-
-declare global {
-  interface Window {
-    ImageTracer: any;
-  }
-}
 
 interface SvgToolsProps {
   defaultMode?: 'svg-to-png' | 'png-to-svg';
@@ -49,18 +44,26 @@ export const SvgTools: React.FC<SvgToolsProps> = ({ defaultMode }) => {
               setOutputUrl(canvas.toDataURL('image/png'));
               setIsProcessing(false);
               notify('Conversion complete!', 'success');
+                            URL.revokeObjectURL(url);
           };
-          img.src = URL.createObjectURL(file);
+                    const url = URL.createObjectURL(file);
+                    img.src = url;
+                    img.onerror = () => {
+                        URL.revokeObjectURL(url);
+                        setIsProcessing(false);
+                        notify('Failed to read SVG file.', 'error');
+                    };
       } else {
           // PNG/JPG to SVG (Vectorization)
           const reader = new FileReader();
           reader.onload = (e) => {
               if (e.target?.result) {
                   const src = e.target.result as string;
-                  window.ImageTracer.imageToSVG(
+                  (ImageTracer as any).imageToSVG(
                       src,
                       (svgstr: string) => {
                           const blob = new Blob([svgstr], { type: 'image/svg+xml' });
+                          if (outputUrl) URL.revokeObjectURL(outputUrl);
                           setOutputUrl(URL.createObjectURL(blob));
                           setIsProcessing(false);
                           notify('Vectorization complete!', 'success');

@@ -1,14 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import GIF from 'gif.js';
 import { Dropzone } from '../components/Dropzone';
 import { DownloadIcon, GifIcon } from '../components/Icons';
 import { useNotification } from '../components/NotificationContext';
-
-declare global {
-  interface Window {
-    pdfjsLib: any;
-    GIF: any;
-  }
-}
+import { pdfjsLib } from '../utils/pdf';
 
 export const PdfToGif: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -17,15 +12,21 @@ export const PdfToGif: React.FC = () => {
   const [delay, setDelay] = useState(1000); // ms
   const { notify } = useNotification();
 
+    useEffect(() => {
+        return () => {
+            if (gifUrl) URL.revokeObjectURL(gifUrl);
+        };
+    }, [gifUrl]);
+
   const process = async () => {
       if (!file) return;
       setIsProcessing(true);
       notify('Starting GIF rendering...', 'info');
       try {
           const buffer = await file.arrayBuffer();
-          const pdf = await window.pdfjsLib.getDocument(buffer).promise;
+          const pdf = await pdfjsLib.getDocument(buffer).promise;
           
-          const gif = new window.GIF({
+          const gif = new (GIF as any)({
               workers: 2,
               quality: 10,
               width: 600,
@@ -59,6 +60,7 @@ export const PdfToGif: React.FC = () => {
           }
           
           gif.on('finished', (blob: Blob) => {
+              if (gifUrl) URL.revokeObjectURL(gifUrl);
               setGifUrl(URL.createObjectURL(blob));
               setIsProcessing(false);
               notify('GIF generated successfully!', 'success');
@@ -120,7 +122,7 @@ export const PdfToGif: React.FC = () => {
                         </a>
                     </div>
                 )}
-                 <button onClick={() => { setFile(null); setGifUrl(''); }} className="mt-6 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 text-sm">Convert Another File</button>
+                                 <button onClick={() => { if (gifUrl) URL.revokeObjectURL(gifUrl); setFile(null); setGifUrl(''); }} className="mt-6 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 text-sm">Convert Another File</button>
             </div>
         )}
     </div>

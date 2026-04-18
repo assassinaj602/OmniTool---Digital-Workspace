@@ -1,18 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { jsPDF } from 'jspdf';
 import { Dropzone } from '../components/Dropzone';
 import { DownloadIcon, PdfIcon } from '../components/Icons';
 import { useNotification } from '../components/NotificationContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
-declare global {
-  interface Window {
-    jspdf: any;
-  }
-}
-
 interface ImageItem {
   id: string;
   file: File;
+  previewUrl: string;
 }
 
 interface ImageToPdfProps {
@@ -28,17 +24,36 @@ export const ImageToPdf: React.FC<ImageToPdfProps> = ({ acceptedFormats, title }
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   
   const { notify } = useNotification();
+  const itemsRef = useRef<ImageItem[]>([]);
+
+  useEffect(() => {
+    itemsRef.current = items;
+  }, [items]);
+
+  useEffect(() => {
+    return () => {
+      itemsRef.current.forEach((item) => URL.revokeObjectURL(item.previewUrl));
+    };
+  }, []);
 
   const acceptString = acceptedFormats ? acceptedFormats.join(',') : "image/*";
 
   const handleFiles = (newFile: File) => {
-    const newItem = { id: Math.random().toString(36).substr(2, 9), file: newFile };
+    const newItem = {
+      id: Math.random().toString(36).substr(2, 9),
+      file: newFile,
+      previewUrl: URL.createObjectURL(newFile),
+    };
     setItems((prev) => [...prev, newItem]);
     notify(`Added ${newFile.name}`, 'info');
   };
 
   const removeFile = (id: string) => {
-    setItems((prev) => prev.filter((item) => item.id !== id));
+    setItems((prev) => {
+      const item = prev.find((entry) => entry.id === id);
+      if (item) URL.revokeObjectURL(item.previewUrl);
+      return prev.filter((entry) => entry.id !== id);
+    });
   };
 
   // Drag and Drop Logic
@@ -69,7 +84,6 @@ export const ImageToPdf: React.FC<ImageToPdfProps> = ({ acceptedFormats, title }
     setIsGenerating(true);
 
     try {
-      const { jsPDF } = window.jspdf;
       const doc = new jsPDF(); 
       
       for (let i = 0; i < items.length; i++) {
@@ -220,7 +234,7 @@ export const ImageToPdf: React.FC<ImageToPdfProps> = ({ acceptedFormats, title }
                 `}
               >
                 <img 
-                  src={URL.createObjectURL(item.file)} 
+                  src={item.previewUrl} 
                   alt="thumb" 
                   className="w-full h-full object-cover pointer-events-none"
                 />
@@ -245,7 +259,10 @@ export const ImageToPdf: React.FC<ImageToPdfProps> = ({ acceptedFormats, title }
 
           <div className="flex justify-end space-x-4">
              <button 
-                onClick={() => setItems([])}
+                onClick={() => {
+                  items.forEach((item) => URL.revokeObjectURL(item.previewUrl));
+                  setItems([]);
+                }}
                 className="px-6 py-3 text-slate-600 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 font-medium transition-colors"
               >
                 Clear All

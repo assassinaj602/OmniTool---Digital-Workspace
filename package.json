@@ -15,7 +15,13 @@
   },
   "dependencies": {
     "framer-motion": "^12.33.0",
+    "gif.js": "^0.2.0",
+    "heic2any": "^0.0.4",
+    "imagetracerjs": "^1.2.6",
+    "jspdf": "^2.5.1",
+    "jszip": "^3.10.1",
     "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^4.8.69",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },

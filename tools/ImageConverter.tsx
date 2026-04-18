@@ -34,6 +34,8 @@ export const ImageConverter: React.FC<ImageConverterProps> = ({
         if (file.type === 'image/jpeg') setTargetFormat('image/png');
         else if (file.type === 'image/png') setTargetFormat('image/jpeg');
       }
+
+      return () => URL.revokeObjectURL(url);
     }
   }, [file, defaultOutputFormat]);
 
